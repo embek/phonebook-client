@@ -6,9 +6,23 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from './components/ErrorPage';
 import PhonebookPage from './components/PhonebookPage';
 import AddPage from './components/AddPage';
-// import CustomContext from './components/CustomContext';
-// import todosReducer from './reducers/todos';
-// import { useReducer } from 'react';
+import { legacy_createStore as createStore, applyMiddleware } from 'redux';
+import { thunk } from 'redux-thunk';
+import rootReducer from './reducers';
+import { Provider } from 'react-redux';
+
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import { PersistGate } from 'redux-persist/integration/react'
+
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+const store = createStore(persistedReducer, applyMiddleware(thunk))
+const persistor = persistStore(store)
 
 const router = createBrowserRouter([
   {
@@ -23,15 +37,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  // const [todoState, todoDispatch] = useReducer(todosReducer, []);
-
-  // const providerState = {
-  //   todoState,
-  //   todoDispatch
-  // }
-
   return (
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <RouterProvider router={router} />
+      </PersistGate>
+    </Provider >
   );
 }
 

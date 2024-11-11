@@ -1,12 +1,13 @@
-import ContactList from "./ContactsList";
+import ContactList from "../containers/ContactsList";
 import TopBar from "./TopBar";
 
 export default function PhonebookPage() {
 
     return (
         <>
-            <TopBar></TopBar>
-            <ContactList></ContactList>
+            ----<TopBar></TopBar>
+            ini phonebook page
+            ----<ContactList></ContactList>
         </>
     );
 }

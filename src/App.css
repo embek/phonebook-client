@@ -28,10 +28,29 @@
   color: #61dafb;
 }
 
+.contact-box {
+  background-color: #CCCCCC;
+  border-style:solid;
+  border-color: #191919;
+  border-width: 2px;
+  height: 200px;
+  width: 400px;
+  border-radius: 10px;
+  margin: 5px 5px 5px 5px;
+}
+
+button {
+  background-color: #AF820F;
+  border-radius: 5px;
+  margin: 2px;
+  box-shadow: none;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

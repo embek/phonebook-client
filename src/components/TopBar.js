@@ -1,8 +1,10 @@
+// import { FontAwesomeIcon } from '@fortawesome/   fontawesome-free'
 export default function TopBar() {
 
     return (
-        <div >
-            ini topbar
-        </div>
+        <>
+          <button>sort</button><input></input><button>add</button>
+        </>
     );
 }
+

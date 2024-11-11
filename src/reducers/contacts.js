@@ -59,6 +59,7 @@ export default function contactsReducer(state = [], action) {
                 if (contact.id === action.id) {
                     contact.avatar = action.avatar;
                 }
+                return contact;
             })
         case 'LOAD_CONTACTS_FAILED':
         case 'UPDATE_CONTACT_FAILED':

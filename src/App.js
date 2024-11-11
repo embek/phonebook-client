@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import '@fortawesome/fontawesome-free';
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 

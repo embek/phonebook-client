@@ -30,20 +30,33 @@
 
 .contact-box {
   background-color: #CCCCCC;
-  border-style:solid;
+  border-style: solid;
   border-color: #191919;
   border-width: 2px;
-  height: 200px;
-  width: 400px;
   border-radius: 10px;
   margin: 5px 5px 5px 5px;
 }
 
-button {
+topbar {
+  width: 100%;
+  flex: auto;
+}
+
+.custom-input {
+  width: 100%;
+  margin-bottom: 0; 
+  border-radius: 5px;
+  border-style: solid;
+}
+
+button,
+.button-add {
   background-color: #AF820F;
   border-radius: 5px;
   margin: 2px;
   box-shadow: none;
+  text-decoration: none;
+  color: black;
 }
 
 @keyframes App-logo-spin {

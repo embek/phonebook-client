@@ -13,6 +13,121 @@
   }
 }
 
+/* For mobile phones: */
+[class*="col-"] {
+  width: 100%;
+  flex-direction: column;
+}
+
+@media only screen and (min-width: 600px) {
+
+  /* For tablets: */
+  .col-s-1 {
+    width: 8.33%;
+  }
+
+  .col-s-2 {
+    width: 16.66%;
+  }
+
+  .col-s-3 {
+    width: 25%;
+  }
+
+  .col-s-4 {
+    width: 33.33%;
+  }
+
+  .col-s-5 {
+    width: 41.66%;
+  }
+
+  .col-s-6 {
+    width: 50%;
+  }
+
+  .col-s-7 {
+    width: 58.33%;
+  }
+
+  .col-s-8 {
+    width: 66.66%;
+  }
+
+  .col-s-9 {
+    width: 75%;
+  }
+
+  .col-s-10 {
+    width: 83.33%;
+  }
+
+  .col-s-11 {
+    width: 91.66%;
+  }
+
+  .col-s-12 {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+
+  /* For desktop: */
+  .col-1 {
+    width: 8.33%;
+  }
+
+  .col-2 {
+    width: 16.66%;
+  }
+
+  .col-3 {
+    width: 25%;
+  }
+
+  .col-4 {
+    width: 33.33%;
+  }
+
+  .col-5 {
+    width: 41.66%;
+  }
+
+  .col-6 {
+    width: 50%;
+  }
+
+  .col-7 {
+    width: 58.33%;
+  }
+
+  .col-8 {
+    width: 66.66%;
+  }
+
+  .col-9 {
+    width: 75%;
+  }
+
+  .col-10 {
+    width: 83.33%;
+  }
+
+  .col-11 {
+    width: 91.66%;
+  }
+
+  .col-12 {
+    width: 100%;
+  }
+}
+
+img.avatar {
+  height: 40px;
+  margin: auto;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -29,32 +144,35 @@
 }
 
 .contact-box {
+  display: flex;
+  height: 6em;
+  flex-direction: row;
   background-color: #CCCCCC;
   border-style: solid;
   border-color: #191919;
   border-width: 2px;
-  border-radius: 10px;
+  border-radius: 4px;
   margin: 5px 5px 5px 5px;
 }
 
-topbar {
-  width: 100%;
-  flex: auto;
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1; 
 }
-
 .custom-input {
   width: 100%;
-  margin-bottom: 0; 
+  margin-bottom: 0;
   border-radius: 5px;
-  border-style: solid;
+  border-style: none;
 }
 
-button,
-.button-add {
+button {
+  padding: 2px;
   background-color: #AF820F;
   border-radius: 5px;
   margin: 2px;
-  box-shadow: none;
+  border-style: none;
   text-decoration: none;
   color: black;
 }

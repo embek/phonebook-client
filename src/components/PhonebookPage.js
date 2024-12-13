@@ -8,16 +8,18 @@ export default function PhonebookPage() {
 
     return (
         <>
-            <div className="topbar row">
-                <button className="col-auto">
+            <div className="topbar">
+                <button>
                     <FontAwesomeIcon icon={faArrowUpAZ} />
                 </button>
-                <input type="text" className="col custom-input"></input>
-                <button className="col-auto" onClick={() => navigate('/add')}>
+                <input type="text"></input>
+                <button onClick={() => navigate('/add')}>
                     <FontAwesomeIcon icon={faUserPlus} />
                 </button>
             </div>
-            <ContactList />
+            <div className="flex-container">
+                <ContactList />
+            </div>
         </>
     );
 }

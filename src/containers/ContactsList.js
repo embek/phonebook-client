@@ -9,8 +9,8 @@ export default function ContactList() {
     }
 
     return (
-        <tbody >
+        <>
             {rows}
-        </tbody>
+        </>
     );
 }

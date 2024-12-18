@@ -6,10 +6,10 @@ export default function ContactItem() {
 
     return (
         <div className="contact-box col-s-4 col-2">
-            <img className="avatar" src="/logo192.png" alt="avatar"/>
-            <div>
-                <div>name</div>
-                <div>phone</div>
+            <img className="avatar" src="/default-avatar.png" alt="avatar"/>
+            <div className="contact-detail">
+                <div className="contact-detail">name</div>
+                <div className="contact-detail">phone</div>
                 <div>
                     <button><FontAwesomeIcon icon={faEdit} /></button>
                     <button><FontAwesomeIcon icon={faTrash} /></button>

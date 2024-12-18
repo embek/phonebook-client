@@ -9,11 +9,11 @@ export default function PhonebookPage() {
     return (
         <>
             <div className="topbar">
-                <button>
+                <button className="sort">
                     <FontAwesomeIcon icon={faArrowUpAZ} />
                 </button>
-                <input type="text"></input>
-                <button onClick={() => navigate('/add')}>
+                <input id="search" type="text"></input>
+                <button className="add" onClick={() => navigate('/add')}>
                     <FontAwesomeIcon icon={faUserPlus} />
                 </button>
             </div>

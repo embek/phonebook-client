@@ -12,6 +12,19 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.flex-container2 {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
 /* For mobile phones: */
 [class*="col-"] {
@@ -22,6 +35,10 @@
 @media only screen and (min-width: 600px) {
 
   /* For tablets: */
+  button.add-page{
+    width: 47.75%;
+  }
+
   .col-s-1 {
     width: 8.33%;
   }
@@ -35,7 +52,7 @@
   }
 
   .col-s-4 {
-    width: 33.33%;
+    width: 30%;
   }
 
   .col-s-5 {
@@ -73,13 +90,24 @@
 
 @media only screen and (min-width: 768px) {
 
+
+  button.add-page{
+    width: 47.75%;
+    height: 3em;
+    padding: 4px;
+    background-color: #AF820F;
+    margin: 2px;
+    border-style: none;
+    text-decoration: none;
+    color: black;
+  }
   /* For desktop: */
   .col-1 {
     width: 8.33%;
   }
 
   .col-2 {
-    width: 16.66%;
+    width: 18%;
   }
 
   .col-3 {
@@ -124,8 +152,9 @@
 }
 
 img.avatar {
-  height: 40px;
-  margin: auto;
+  height: 50%;
+  aspect-ratio: 1;
+  margin: auto 10%;
 }
 
 .App-header {
@@ -148,7 +177,7 @@ img.avatar {
   height: 6em;
   flex-direction: row;
   background-color: #CCCCCC;
-  border-style: solid;
+  border-style: ridge;
   border-color: #191919;
   border-width: 2px;
   border-radius: 4px;
@@ -158,19 +187,51 @@ img.avatar {
 .topbar {
   position: sticky;
   top: 0;
-  z-index: 1; 
-}
-.custom-input {
-  width: 100%;
-  margin-bottom: 0;
-  border-radius: 5px;
-  border-style: none;
+  z-index: 1;
+  display: flex ;
+  justify-content: center;
 }
 
-button {
-  padding: 2px;
-  background-color: #AF820F;
+#search{
+  height: 2.5em;
+  margin: auto 0.5em;
+  flex-grow: 20;
   border-radius: 5px;
+  border-style: ridge;
+}
+
+button{
+  width: 2em;
+  aspect-ratio: 1;
+  background-color:#CCCCCC;
+  border: none;
+  border-radius: 5px;
+}
+
+.custom-input {
+  width: 95%;
+  height: 2.5em;
+  margin: 2px auto;
+  border-radius: 5px;
+  border-style: ridge;
+}
+
+button.add,button.sort {
+  width: 3em;
+  aspect-ratio: 1;
+  padding: 4px;
+  background-color: #AF820F;
+  margin: 2px;
+  border-style: none;
+  text-decoration: none;
+  color: black;
+}
+
+.add-page{
+  width: 95.7%;
+  height: 3em;
+  padding: 4px;
+  background-color: #AF820F;
   margin: 2px;
   border-style: none;
   text-decoration: none;
@@ -185,4 +246,8 @@ button {
   to {
     transform: rotate(360deg);
   }
+}
+
+div.contact-detail{
+  margin: auto 10%;
 }

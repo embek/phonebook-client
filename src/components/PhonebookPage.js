@@ -1,7 +1,7 @@
 import ContactList from "../containers/ContactsList";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpAZ, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpAZ, faSearch, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function PhonebookPage() {
     const navigate = useNavigate();
@@ -12,6 +12,7 @@ export default function PhonebookPage() {
                 <button className="sort">
                     <FontAwesomeIcon icon={faArrowUpAZ} />
                 </button>
+                <i className="mag-glass"><FontAwesomeIcon icon={faSearch} /></i>
                 <input id="search" type="text"></input>
                 <button className="add" onClick={() => navigate('/add')}>
                     <FontAwesomeIcon icon={faUserPlus} />

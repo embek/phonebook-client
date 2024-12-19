@@ -194,6 +194,7 @@ img.avatar {
 
 #search{
   height: 2.5em;
+  padding-left: 40px;
   margin: auto 0.5em;
   flex-grow: 20;
   border-radius: 5px;
@@ -250,4 +251,13 @@ button.add,button.sort {
 
 div.contact-detail{
   margin: auto 10%;
+}
+
+.mag-glass{
+  position: absolute;
+  left: 65px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #777;
+  z-index: 1;
 }

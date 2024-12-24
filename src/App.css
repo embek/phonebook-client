@@ -175,13 +175,16 @@ img.avatar {
 .contact-box {
   display: flex;
   height: 6em;
+  width: 95%;
   flex-direction: row;
+  flex-grow: 1;
   background-color: #CCCCCC;
   border-style: ridge;
   border-color: #191919;
   border-width: 2px;
   border-radius: 4px;
-  margin: 5px 5px 5px 5px;
+  margin: 5px auto;
+  padding: 0 10px;
 }
 
 .topbar {

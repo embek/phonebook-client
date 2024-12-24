@@ -7,38 +7,40 @@ export const loadContacts = (query) => async (dispatch, getState) => {
                 query
             }
         })
-
-        dispatch({ type: 'LOAD_CONTACTS', contacts: data.phonebooks })
+        console.log(data);
+        return dispatch({
+            type: 'LOAD_CONTACTS',
+            payload: data.phonebooks
+        });
     } catch (error) {
-        console.log(error)
-        dispatch({ type: 'LOAD_CONTACTS_FAILED', contacts: getState().contacts })
+        console.error(error);
+        return dispatch({
+            type: 'LOAD_CONTACTS_FAILED',
+            payload: getState().contacts
+        });
     }
 }
 
 export const addContact = (name, phone) => async dispatch => {
-    const id = Date.now().toString()
     try {
-        dispatch({
-            type: 'ADD_CONTACT_REQUEST',
-            id,
+        const { data } = await api.post('api/phonebooks', {
             name,
             phone
-        })
-        const data = await api.post('api/phonebooks', {
-            name,
-            phone
-        })
+        });
+        
         dispatch({
             type: 'ADD_CONTACT_SUCCESS',
-            oldId: id,
-            newId: data.id
-        })
+            payload: {
+                id: data.id,
+                name,
+                phone
+            }
+        });
     } catch (error) {
-        console.log(error)
+        console.error(error);
         dispatch({
-            type: 'ADD_CONTACT_FAILED',
-            id
-        })
+            type: 'ADD_CONTACT_FAILED'
+        });
     }
 }
 
@@ -73,7 +75,7 @@ export const removeContact = (id) => async dispatch => {
 
 export const updateContact = (id, name, phone) => async dispatch => {
     try {
-        const data  = await api.put(`api/phonebooks/${id}`, {
+        const data = await api.put(`api/phonebooks/${id}`, {
             name,
             phone
         })
@@ -93,7 +95,7 @@ export const updateContact = (id, name, phone) => async dispatch => {
 
 export const updateAvatar = (id, avatar) => async dispatch => {
     try {
-        const data  = await api.put(`api/phonebooks/${id}/avatar`, {
+        const data = await api.put(`api/phonebooks/${id}/avatar`, {
             avatar
         })
         dispatch({

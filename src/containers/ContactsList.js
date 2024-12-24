@@ -1,16 +1,17 @@
 import ContactItem from "./ContactItem";
+import { useSelector } from "react-redux";
 
 export default function ContactList() {
-
-    const rows = [];
-
-    for (let i = 0; i < 53; i++) {
-        rows.push(<ContactItem key={i} />);
-    }
+    const contacts = useSelector(state => state.contacts);
 
     return (
-        <>
-            {rows}
-        </>
+        <div className="contacts-list">
+            {contacts.map((contact) => (
+                <ContactItem
+                    key={contact.id}
+                    id={contact.id}
+                />
+            ))}
+        </div>
     );
 }

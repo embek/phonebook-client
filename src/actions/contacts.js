@@ -7,7 +7,6 @@ export const loadContacts = (query) => async (dispatch, getState) => {
                 query
             }
         })
-        console.log(data);
         return dispatch({
             type: 'LOAD_CONTACTS',
             payload: data.phonebooks

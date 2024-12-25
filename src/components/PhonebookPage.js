@@ -26,9 +26,7 @@ export default function PhonebookPage() {
                     <FontAwesomeIcon icon={faUserPlus} />
                 </button>
             </div>
-            <div className="flex-container">
-                <ContactList />
-            </div>
+            <ContactList />
         </>
     );
 }

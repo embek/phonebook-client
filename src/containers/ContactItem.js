@@ -6,17 +6,16 @@ import React from "react";
 
 export default function ContactItem({ id }) {
     const dispatch = useDispatch();
-    const contact = useSelector(state => 
+    const contact = useSelector(state =>
         state.contacts.find(contact => contact.id === id)
     );
-
     const handleDelete = () => {
         dispatch(removeContact(id));
     };
 
     return (
-        <div className="contact-box col-s-4 col-2">
-            <img className="avatar" src={contact.avatar || "/default-avatar.png"} alt="avatar"/>
+        <div className="contact-box col-s-3 col-2">
+            <img className="avatar" src={contact.avatar ? "http://localhost:3000/images/" + contact.avatar : "/default-avatar.png"} alt="avatar" />
             <div className="contact-detail">
                 <div className="contact-detail">{contact.name}</div>
                 <div className="contact-detail">{contact.phone}</div>

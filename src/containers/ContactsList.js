@@ -5,13 +5,17 @@ export default function ContactList() {
     const contacts = useSelector(state => state.contacts);
 
     return (
-        <div className="contacts-list">
-            {contacts.map((contact) => (
-                <ContactItem
-                    key={contact.id}
-                    id={contact.id}
-                />
-            ))}
-        </div>
+        <>
+            <div className="contacts-list">
+                {contacts.map(contact => (
+                    <div key={contact.id} className="contact-card">
+                        <ContactItem
+                            key={contact.id}
+                            id={contact.id}
+                        />
+                    </div>
+                ))}
+            </div>
+        </>
     );
 }

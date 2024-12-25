@@ -12,7 +12,8 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-.flex-container {
+
+.contact-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -32,10 +33,20 @@
   flex-direction: column;
 }
 
-@media only screen and (min-width: 600px) {
+button.add-page {
+  width: 95.7%;
+  height: 3em;
+  padding: 4px;
+  background-color: #AF820F;
+  margin: 2px;
+  border-style: none;
+  text-decoration: none;
+  color: black;
+}
 
+@media only screen and (min-width: 600px) {
   /* For tablets: */
-  button.add-page{
+  button.add-page {
     width: 47.75%;
   }
 
@@ -89,9 +100,8 @@
 }
 
 @media only screen and (min-width: 768px) {
-
-
-  button.add-page{
+  /* For desktop: */
+  button.add-page {
     width: 47.75%;
     height: 3em;
     padding: 4px;
@@ -101,13 +111,13 @@
     text-decoration: none;
     color: black;
   }
-  /* For desktop: */
+
   .col-1 {
     width: 8.33%;
   }
 
   .col-2 {
-    width: 18%;
+    width: 17%;
   }
 
   .col-3 {
@@ -152,9 +162,10 @@
 }
 
 img.avatar {
-  height: 50%;
+  height: 70%;
   aspect-ratio: 1;
-  margin: auto 10%;
+  margin: auto 1px;
+  border-radius: 50%;
 }
 
 .App-header {
@@ -174,28 +185,28 @@ img.avatar {
 
 .contact-box {
   display: flex;
+  flex-shrink: 1;
   height: 6em;
-  width: 95%;
   flex-direction: row;
-  flex-grow: 1;
   background-color: #CCCCCC;
   border-style: ridge;
   border-color: #191919;
   border-width: 2px;
   border-radius: 4px;
-  margin: 5px auto;
-  padding: 0 10px;
+  margin: 5px 5px;
+  padding: 0 2px;
+  align-items: center;
 }
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 1;
-  display: flex ;
+  display: flex;
   justify-content: center;
 }
 
-#search{
+#search {
   height: 2.5em;
   padding-left: 40px;
   margin: auto 0.5em;
@@ -204,10 +215,10 @@ img.avatar {
   border-style: ridge;
 }
 
-button{
+button {
   width: 2em;
   aspect-ratio: 1;
-  background-color:#CCCCCC;
+  background-color: #CCCCCC;
   border: none;
   border-radius: 5px;
 }
@@ -215,25 +226,15 @@ button{
 .custom-input {
   width: 95%;
   height: 2.5em;
+  padding-left: 10px;
   margin: 2px auto;
   border-radius: 5px;
   border-style: ridge;
 }
 
-button.add,button.sort {
+button.add, button.sort {
   width: 3em;
   aspect-ratio: 1;
-  padding: 4px;
-  background-color: #AF820F;
-  margin: 2px;
-  border-style: none;
-  text-decoration: none;
-  color: black;
-}
-
-.add-page{
-  width: 95.7%;
-  height: 3em;
   padding: 4px;
   background-color: #AF820F;
   margin: 2px;
@@ -252,11 +253,24 @@ button.add,button.sort {
   }
 }
 
-div.contact-detail{
-  margin: auto 10%;
+div.contact-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 1;
+  margin: 0 5px;
 }
 
-.mag-glass{
+
+div.contact-detail {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 1;
+  margin: 0 5px;
+}
+
+.mag-glass {
   position: absolute;
   left: 65px;
   top: 50%;

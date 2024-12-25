@@ -1,7 +1,7 @@
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
-import { removeContact } from "../actions/contacts";
+import { showDeleteModal } from "../actions/modal";
 import React from "react";
 
 export default function ContactItem({ id }) {
@@ -9,8 +9,10 @@ export default function ContactItem({ id }) {
     const contact = useSelector(state =>
         state.contacts.find(contact => contact.id === id)
     );
-    const handleDelete = () => {
-        dispatch(removeContact(id));
+
+    const handleDeleteClick = (e) => {
+        e.preventDefault();
+        dispatch(showDeleteModal({ id }));
     };
 
     return (
@@ -21,7 +23,7 @@ export default function ContactItem({ id }) {
                 <div className="contact-detail">{contact.phone}</div>
                 <div>
                     <button><FontAwesomeIcon icon={faEdit} /></button>
-                    <button onClick={handleDelete}><FontAwesomeIcon icon={faTrash} /></button>
+                    <button onClick={handleDeleteClick}><FontAwesomeIcon icon={faTrash} /></button>
                 </div>
             </div>
         </div>

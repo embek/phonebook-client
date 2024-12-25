@@ -1,11 +1,10 @@
 import { api } from "./api"
 
-export const loadContacts = (query) => async (dispatch, getState) => {
+export const loadContacts = () => async (dispatch, getState) => {
     try {
+        const query = getState().query;
         const { data } = await api.get('api/phonebooks', {
-            params: {
-                query
-            }
+            params: query
         })
         return dispatch({
             type: 'LOAD_CONTACTS',
@@ -109,3 +108,16 @@ export const updateAvatar = (id, avatar) => async dispatch => {
         })
     }
 }
+
+export const toggleSort = () => (dispatch) => {
+    dispatch({ type: 'TOGGLE_SORT_MODE' });
+    dispatch(loadContacts());
+};
+
+export const setQuery = (queryParams) => (dispatch) => {
+    dispatch({ 
+        type: 'SET_QUERY', 
+        payload: queryParams 
+    });
+    dispatch(loadContacts());
+};

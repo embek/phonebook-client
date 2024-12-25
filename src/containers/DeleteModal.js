@@ -25,10 +25,10 @@ export default function DeleteModal() {
         <div className="modal">
             <div className="modal-content">
                 <h3>Delete Contact</h3>
-                <p>Are you sure you want to delete {contact?.name}?</p>
+                <p>Apakah anda yakin ingin menghapus {contact?.name}?</p>
                 <div className="modal-buttons">
-                    <button onClick={handleConfirm}>Delete</button>
-                    <button onClick={handleCancel}>Cancel</button>
+                    <button onClick={handleConfirm}>Ya</button>
+                    <button onClick={handleCancel}>Tidak</button>
                 </div>
             </div>
         </div>

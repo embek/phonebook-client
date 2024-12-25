@@ -31,8 +31,8 @@ export default function AddPage() {
                 placeholder="Phone"
             /></div>
             <div>
-                <button className="add-page" onClick={handleSubmit}>save</button>
-                <button className="add-page" onClick={() => navigate('/')}>cancel</button>
+                <button className="add-page-button" onClick={handleSubmit}>save</button>
+                <button className="add-page-button" onClick={() => navigate('/')}>cancel</button>
             </div>
         </div>
     );

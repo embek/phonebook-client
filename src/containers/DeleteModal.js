@@ -29,8 +29,8 @@ export default function DeleteModal() {
                 <h3>Delete Contact</h3>
                 <p>Apakah anda yakin ingin menghapus {contact.name}?</p>
                 <div className="modal-buttons">
-                    <button onClick={handleConfirm}>Ya</button>
-                    <button onClick={handleCancel}>Tidak</button>
+                    <button className="confirm-button" onClick={handleConfirm}>Ya</button>
+                    <button className="cancel-button" onClick={handleCancel}>Tidak</button>
                 </div>
             </div>
         </div>

@@ -2,16 +2,15 @@ import { faEdit, faTrash, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 import { showDeleteModal } from "../actions/modal";
-import { setEditMode, setEditFormData, updateContact, updateEditFormData } from "../actions/contacts";
-import React from "react";
+import { setEditMode, setEditFormData, updateContact, updateEditFormData, updateAvatar } from "../actions/contacts";
+import React, { useRef } from "react";
 
 export default function ContactItem({ id }) {
     const dispatch = useDispatch();
-    const contact = useSelector(state => 
-        state?.contacts?.find(contact => contact.id === id)
-    );
+    const contact = useSelector(state => state.contacts.find(contact => contact.id === id));
     const edit = useSelector(state => state.edit);
     const isEditing = edit.isEdit && edit.contactIdToEdit === id;
+    const avatarInputRef = useRef(null);
 
     const handleDeleteClick = (e) => {
         e.preventDefault();
@@ -34,9 +33,32 @@ export default function ContactItem({ id }) {
         dispatch(updateEditFormData({ [field]: value }));
     };
 
+    const handleAvatarClick = () => {
+        avatarInputRef.current.click();
+    };
+
+    const handleAvatarChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            dispatch(updateAvatar(id, file));
+        }
+    };
+
     return (
         <div className="contact-box col-s-3 col-2">
-            <img className="avatar" src={contact.avatar ? "http://localhost:3000/images/" + contact.avatar : "/default-avatar.png"} alt="avatar" />
+            <img
+                className="avatar"
+                src={contact.avatar ? "http://localhost:3000/images/" + contact.avatar : "/default-avatar.png"}
+                alt="avatar"
+                onClick={handleAvatarClick}
+            />
+            <input
+                type="file"
+                ref={avatarInputRef}
+                className="avatar-input"
+                style={{ display: 'none' }}
+                onChange={handleAvatarChange}
+            />
             <div className="contact-detail">
                 {isEditing ? (
                     <>

@@ -93,21 +93,29 @@ export const updateContact = (id, name, phone) => async dispatch => {
 
 export const updateAvatar = (id, avatar) => async dispatch => {
     try {
-        const { data } = await api.put(`api/phonebooks/${id}/avatar`, {
-            avatar
-        })
+        const formData = new FormData();
+        formData.append('avatar', avatar);
+
+        const { data } = await api.put(`api/phonebooks/${id}/avatar`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
         dispatch({
             type: 'UPDATE_AVATAR',
             id: data.id,
-            avatar
-        })
+            avatar: data.avatar
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        if (error.response && error.response.status === 400) {
+            alert('Failed to upload avatar: Bad Request');
+        }
         dispatch({
             type: 'UPDATE_AVATAR_FAILED'
-        })
+        });
     }
-}
+};
 
 export const toggleSort = () => (dispatch) => {
     dispatch({ type: 'TOGGLE_SORT_MODE' });

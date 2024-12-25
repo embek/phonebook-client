@@ -8,12 +8,10 @@ export default function ContactList() {
         <>
             <div className="contacts-list">
                 {contacts.map(contact => (
-                    <div key={contact.id} className="contact-card">
-                        <ContactItem
-                            key={contact.id}
-                            id={contact.id}
-                        />
-                    </div>
+                    <ContactItem
+                        key={contact.id}
+                        id={contact.id}
+                    />
                 ))}
             </div>
         </>

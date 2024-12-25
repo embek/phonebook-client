@@ -18,6 +18,9 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .flex-container2 {
@@ -100,10 +103,12 @@ button.add-page {
 }
 
 img.avatar {
-  height: 70%;
-  aspect-ratio: 1;
-  margin: auto 10%;
+  height: 60px;
+  width: 60px;
+  min-width: 60px;
   border-radius: 50%;
+  margin: 0 10px;
+  object-fit: cover;
 }
 
 .App-header {
@@ -131,10 +136,30 @@ img.avatar {
   border-color: #191919;
   border-width: 2px;
   border-radius: 4px;
-  margin: 5px 5px;
+  margin: 5px;
   padding: 0 2px;
   justify-content: start;
   align-items: center;
+  overflow: hidden;
+  /* Mobile first - single column */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tablet view (600px and up) */
+@media only screen and (min-width: 600px) {
+  .contact-box {
+    width: calc(33.333% - 10px);
+    margin: 5px;
+  }
+}
+
+/* Desktop view (1024px and up) */
+@media only screen and (min-width: 1024px) {
+  .contact-box {
+    width: calc(20% - 10px);
+    margin: 5px;
+  }
 }
 
 .topbar {
@@ -197,7 +222,8 @@ div.contact-card {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  flex-shrink: 1;
+  flex: 1;
+  min-width: 0;
   margin: 0 5px;
 }
 
@@ -205,9 +231,11 @@ div.contact-detail {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  text-wrap: wrap;
-  flex-shrink: 1;
-  margin: 0 5px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
 }
 
 .mag-glass {
@@ -267,4 +295,13 @@ div.contact-detail {
 .modal-buttons button:hover {
   background-color: #8B6B0E;
   cursor: pointer;
+}
+
+.edit-input {
+  width: 100%;
+  margin: 2px 0;
+  padding: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }

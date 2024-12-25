@@ -35,6 +35,11 @@ const router = createBrowserRouter([
     path: "/add",
     element: <AddPage />,
   },
+  {
+    future: {
+      v7_startTransition: true
+    }
+  }
 ]);
 
 function App() {

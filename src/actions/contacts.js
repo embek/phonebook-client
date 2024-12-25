@@ -1,8 +1,9 @@
 import { api } from "./api"
 
-export const loadContacts = () => async (dispatch, getState) => {
+export const loadContacts = (queryParams) => async (dispatch, getState) => {
     try {
-        const query = getState().query;
+        const currentQuery = getState().query;
+        const query = { ...currentQuery, ...queryParams };
         const { data } = await api.get('api/phonebooks', {
             params: query
         })
@@ -25,7 +26,7 @@ export const addContact = (name, phone) => async dispatch => {
             name,
             phone
         });
-        
+
         dispatch({
             type: 'ADD_CONTACT_SUCCESS',
             payload: {
@@ -73,7 +74,7 @@ export const removeContact = (id) => async dispatch => {
 
 export const updateContact = (id, name, phone) => async dispatch => {
     try {
-        const data = await api.put(`api/phonebooks/${id}`, {
+        const { data } = await api.put(`api/phonebooks/${id}`, {
             name,
             phone
         })
@@ -83,17 +84,16 @@ export const updateContact = (id, name, phone) => async dispatch => {
             name,
             phone
         })
+        // Automatically exit edit mode after successful update
+        dispatch(setEditMode(false, null));
     } catch (error) {
         console.log(error)
-        dispatch({
-            type: 'UPDATE_CONTACT_FAILED'
-        })
     }
 }
 
 export const updateAvatar = (id, avatar) => async dispatch => {
     try {
-        const data = await api.put(`api/phonebooks/${id}/avatar`, {
+        const { data } = await api.put(`api/phonebooks/${id}/avatar`, {
             avatar
         })
         dispatch({
@@ -115,9 +115,25 @@ export const toggleSort = () => (dispatch) => {
 };
 
 export const setQuery = (queryParams) => (dispatch) => {
-    dispatch({ 
-        type: 'SET_QUERY', 
-        payload: queryParams 
+    dispatch({
+        type: 'SET_QUERY',
+        payload: queryParams
     });
-    dispatch(loadContacts());
+    dispatch(loadContacts(queryParams));
 };
+
+export const setEditMode = (isEdit, contactId) => ({
+    type: 'SET_EDIT_MODE',
+    isEdit,
+    contactId
+});
+
+export const setEditFormData = (formData) => ({
+    type: 'SET_EDIT_FORM_DATA',
+    payload: formData
+});
+
+export const updateEditFormData = (fieldData) => ({
+    type: 'UPDATE_EDIT_FORM_DATA',
+    payload: fieldData
+});

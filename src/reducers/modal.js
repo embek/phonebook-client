@@ -1,27 +1,19 @@
 const initialState = {
-    deleteModal: {
-        isOpen: false,
-        contactId: null
-    }
+    isOpen: false,
+    contactIdToDelete: null
 };
 
 export default function modalReducer(state = initialState, action) {
     switch (action.type) {
         case 'SHOW_DELETE_MODAL':
             return {
-                ...state,
-                deleteModal: {
-                    isOpen: true,
-                    contactId: action.contactId
-                }
+                isOpen: true,
+                contactIdToDelete: action.contactId
             };
         case 'HIDE_DELETE_MODAL':
             return {
-                ...state,
-                deleteModal: {
-                    isOpen: false,
-                    contactId: null
-                }
+                isOpen: false,
+                contactIdToDelete: null
             };
         default:
             return state;

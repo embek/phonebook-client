@@ -47,7 +47,7 @@ export default function ContactItem({ id }) {
         <div className="contact-box col-s-3 col-2">
             <img
                 className="avatar"
-                src={contact.avatar ? "http://localhost:3000/images/" + contact.avatar : "/default-avatar.png"}
+                src={contact.avatar ? "http://192.168.1.20:3000/images/" + contact.avatar : "/default-avatar.png"}
                 alt="avatar"
                 onClick={handleAvatarClick}
             />

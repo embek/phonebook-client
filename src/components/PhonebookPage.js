@@ -13,23 +13,30 @@ export default function PhonebookPage() {
     const sortMode = useSelector(state => state.query.sortMode);
     const searchQuery = useSelector(state => state.query.search);
     const limit = useSelector(state => state.query.limit);
-    const totalContacts = useSelector(state => state.contacts.length); 
+    const totalContacts = useSelector(state => state.query.total);
 
     useEffect(() => {
-        dispatch(loadContacts());
-    }, [dispatch]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-                if (limit < totalContacts) { 
-                    dispatch(setQuery({ limit: limit + 5 }));
-                }
+        const checkAndLoadMoreContacts = () => {
+            if (document.body.scrollHeight <= window.visualViewport.height) {
+                dispatch(setQuery({ limit: limit + 1 }));
             }
         };
 
+        const handleScroll = () => {
+            if (window.visualViewport.height + document.documentElement.scrollTop === document.body.scrollHeight && limit <= totalContacts) {
+                dispatch(setQuery({ limit: limit + 5 }));
+            }
+        };
+
+        dispatch(loadContacts()).then(checkAndLoadMoreContacts);
+        window.addEventListener('resize', checkAndLoadMoreContacts);
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener('touchmove', handleScroll);
+        return () => {
+            window.removeEventListener('resize', checkAndLoadMoreContacts);
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('touchmove', handleScroll);
+        };
     }, [dispatch, limit, totalContacts]);
 
     const handleSearchChange = (e) => {

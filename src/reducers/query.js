@@ -2,7 +2,8 @@ const initialState = {
     search: '',
     sortBy: 'name',
     sortMode: 'ASC',
-    limit: 10
+    limit: 10,
+    total: 0
 };
 
 export default function queryReducer(state = initialState, action) {
@@ -14,6 +15,16 @@ export default function queryReducer(state = initialState, action) {
                 ...state,
                 sortMode: state.sortMode === 'ASC' ? 'DESC' : 'ASC'
             };
+        case 'RESET_LIMIT':
+            return {
+                ...state,
+                limit: action.payload
+            };
+        case 'RESET_TOTAL':
+            return {
+                ...state,
+                total: action.payload
+            }
         default:
             return state;
     }

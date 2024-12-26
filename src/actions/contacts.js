@@ -5,19 +5,14 @@ export const loadContacts = () => async (dispatch, getState) => {
         const query = getState().query;
         const { data } = await api.get('api/phonebooks', {
             params: query
-        })
-        dispatch({
-            type: 'LOAD_CONTACTS',
-            payload: data.phonebooks
         });
+        dispatch({ type: 'RESET_TOTAL', payload: data.total });
+        dispatch({ type: 'LOAD_CONTACTS', payload: data.phonebooks });
     } catch (error) {
         console.error(error);
-        dispatch({
-            type: 'LOAD_CONTACTS_FAILED',
-            payload: getState().contacts
-        });
+        dispatch({ type: 'LOAD_CONTACTS_FAILED', payload: getState().contacts });
     }
-}
+};
 
 export const addContact = (name, phone) => async dispatch => {
     try {
@@ -126,10 +121,8 @@ export const toggleSort = () => (dispatch) => {
 };
 
 export const setQuery = (queryParams) => (dispatch) => {
-    dispatch({
-        type: 'SET_QUERY',
-        payload: queryParams
-    });
+    dispatch({ type: 'RESET_LIMIT', payload: 10 });
+    dispatch({ type: 'SET_QUERY', payload: queryParams });
     dispatch(loadContacts());
 };
 

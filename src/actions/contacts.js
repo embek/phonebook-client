@@ -1,9 +1,8 @@
 import { api } from "./api"
 
-export const loadContacts = (queryParams) => async (dispatch, getState) => {
+export const loadContacts = () => async (dispatch, getState) => {
     try {
-        const currentQuery = getState().query;
-        const query = { ...currentQuery, ...queryParams };
+        const query = getState().query;
         const { data } = await api.get('api/phonebooks', {
             params: query
         })
@@ -66,6 +65,7 @@ export const removeContact = (id) => async dispatch => {
             type: 'REMOVE_CONTACT',
             id: data.id
         })
+        dispatch(loadContacts());
     } catch (error) {
         console.log(error)
         alert('gagal hapus data')
@@ -84,8 +84,8 @@ export const updateContact = (id, name, phone) => async dispatch => {
             name,
             phone
         })
-        // Automatically exit edit mode after successful update
         dispatch(setEditMode(false, null));
+        dispatch(loadContacts());
     } catch (error) {
         console.log(error)
     }
@@ -106,6 +106,7 @@ export const updateAvatar = (id, avatar) => async dispatch => {
             id: data.id,
             avatar: data.avatar
         });
+        dispatch(loadContacts());
     } catch (error) {
         console.log(error);
         if (error.response && error.response.status === 400) {
@@ -127,7 +128,7 @@ export const setQuery = (queryParams) => (dispatch) => {
         type: 'SET_QUERY',
         payload: queryParams
     });
-    dispatch(loadContacts(queryParams));
+    dispatch(loadContacts());
 };
 
 export const setEditMode = (isEdit, contactId) => ({
@@ -141,7 +142,10 @@ export const setEditFormData = (formData) => ({
     payload: formData
 });
 
-export const updateEditFormData = (fieldData) => ({
-    type: 'UPDATE_EDIT_FORM_DATA',
-    payload: fieldData
-});
+export const updateEditFormData = (fieldData) => async dispatch => {
+    dispatch({
+        type: 'UPDATE_EDIT_FORM_DATA',
+        payload: fieldData
+    });
+    dispatch(loadContacts());
+}

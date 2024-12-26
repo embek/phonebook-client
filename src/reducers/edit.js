@@ -13,12 +13,8 @@ export default function editReducer(state = initialState, action) {
             return {
                 ...state,
                 isEdit: action.isEdit,
-                contactIdToEdit: action.contactId
-            };
-        case 'SET_EDIT_FORM_DATA':
-            return {
-                ...state,
-                formData: action.payload
+                contactIdToEdit: action.contactId,
+                formData: action.formData || state.formData
             };
         case 'UPDATE_EDIT_FORM_DATA':
             return {

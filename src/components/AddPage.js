@@ -17,7 +17,7 @@ export default function AddPage() {
     };
 
     return (
-        <div className="flex-container2">
+        <div className="add-form">
             <div><input 
                 className="custom-input" 
                 value={name}

@@ -12,10 +12,25 @@ export default function PhonebookPage() {
     const dispatch = useDispatch();
     const sortMode = useSelector(state => state.query.sortMode);
     const searchQuery = useSelector(state => state.query.search);
+    const limit = useSelector(state => state.query.limit);
+    const totalContacts = useSelector(state => state.contacts.length); 
 
     useEffect(() => {
-        dispatch(loadContacts({}));
+        dispatch(loadContacts());
     }, [dispatch]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+                if (limit < totalContacts) { 
+                    dispatch(setQuery({ limit: limit + 5 }));
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [dispatch, limit, totalContacts]);
 
     const handleSearchChange = (e) => {
         dispatch(setQuery({ search: e.target.value }));

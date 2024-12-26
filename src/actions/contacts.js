@@ -6,13 +6,13 @@ export const loadContacts = () => async (dispatch, getState) => {
         const { data } = await api.get('api/phonebooks', {
             params: query
         })
-        return dispatch({
+        dispatch({
             type: 'LOAD_CONTACTS',
             payload: data.phonebooks
         });
     } catch (error) {
         console.error(error);
-        return dispatch({
+        dispatch({
             type: 'LOAD_CONTACTS_FAILED',
             payload: getState().contacts
         });
@@ -34,6 +34,7 @@ export const addContact = (name, phone) => async dispatch => {
                 phone
             }
         });
+        dispatch(loadContacts());
     } catch (error) {
         console.error(error);
         dispatch({
@@ -52,7 +53,8 @@ export const resendContact = ({ id, name, phone }) => async dispatch => {
             type: 'RESEND_CONTACT',
             oldId: id,
             newId: data.id
-        })
+        });
+        dispatch(loadContacts());
     } catch (error) {
         console.log('gagal resend')
     }
@@ -64,7 +66,7 @@ export const removeContact = (id) => async dispatch => {
         dispatch({
             type: 'REMOVE_CONTACT',
             id: data.id
-        })
+        });
         dispatch(loadContacts());
     } catch (error) {
         console.log(error)
@@ -83,7 +85,7 @@ export const updateContact = (id, name, phone) => async dispatch => {
             id: data.id,
             name,
             phone
-        })
+        });
         dispatch(setEditMode(false, null));
         dispatch(loadContacts());
     } catch (error) {
@@ -131,15 +133,11 @@ export const setQuery = (queryParams) => (dispatch) => {
     dispatch(loadContacts());
 };
 
-export const setEditMode = (isEdit, contactId) => ({
+export const setEditMode = (isEdit, contactId, formData = null) => ({
     type: 'SET_EDIT_MODE',
     isEdit,
-    contactId
-});
-
-export const setEditFormData = (formData) => ({
-    type: 'SET_EDIT_FORM_DATA',
-    payload: formData
+    contactId,
+    formData
 });
 
 export const updateEditFormData = (fieldData) => async dispatch => {

@@ -1,7 +1,8 @@
 const initialState = {
     search: '',
     sortBy: 'name',
-    sortMode: 'ASC'
+    sortMode: 'ASC',
+    limit: 10
 };
 
 export default function queryReducer(state = initialState, action) {

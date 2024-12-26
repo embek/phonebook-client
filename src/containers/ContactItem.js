@@ -2,8 +2,8 @@ import { faEdit, faTrash, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 import { showDeleteModal } from "../actions/modal";
-import { setEditMode, setEditFormData, updateContact, updateEditFormData, updateAvatar } from "../actions/contacts";
-import React, { useRef } from "react";
+import { setEditMode, updateContact, updateEditFormData, updateAvatar } from "../actions/contacts";
+import { useRef } from "react";
 
 export default function ContactItem({ id }) {
     const dispatch = useDispatch();
@@ -18,8 +18,7 @@ export default function ContactItem({ id }) {
     };
 
     const handleEditClick = () => {
-        dispatch(setEditMode(true, id));
-        dispatch(setEditFormData({
+        dispatch(setEditMode(true, id, {
             name: contact.name,
             phone: contact.phone
         }));

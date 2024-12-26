@@ -23,7 +23,7 @@
   box-sizing: border-box;
 }
 
-.flex-container2 {
+.add-form {
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -261,7 +261,7 @@ div.contact-detail {
 }
 
 .modal-content {
-  background-color:white;
+  background-color: white;
   padding: 20px;
   border-radius: 4px;
   border-style: ridge;
@@ -298,18 +298,18 @@ div.contact-detail {
 }
 
 .avatar {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .avatar-input {
-    display: none;
+  display: none;
 }
 
 .edit-input {
-  width: 100%;
+  width: 90%;
   margin: 2px 0;
   padding: 4px;
-  border: 1px solid #ccc;
+  border: 1px ridge black;
   border-radius: 4px;
   box-sizing: border-box;
 }

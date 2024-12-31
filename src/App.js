@@ -4,6 +4,7 @@ import PhonebookPage from './components/PhonebookPage';
 import AddPage from './components/AddPage';
 import ErrorPage from './components/ErrorPage';
 import axios from "axios";
+import './App.css';
 
 const api = axios.create({
   baseURL: 'http://192.168.1.20:3000/',

@@ -9,11 +9,11 @@ import { api } from "../api/contactsAPI";
 export default function PhonebookPage() {
     const [contacts, setContacts] = useState([]);
     const [total, setTotal] = useState(0);
-    const [query, setQuery] = useState({
+    const [query, setQuery] = useState(JSON.parse(localStorage.getItem('query')) || {
+        limit: 5,
         search: '',
         sortMode: 'ASC',
-        sortBy: 'name',
-        limit: 10
+        sortBy: 'name'
     });
     const [deleteModal, setDeleteModal] = useState({
         isOpen: false,
@@ -21,6 +21,10 @@ export default function PhonebookPage() {
     });
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        localStorage.setItem('query', JSON.stringify(query));
+    }, [query])
 
     const removeContact = async (id) => {
         try {
@@ -50,7 +54,6 @@ export default function PhonebookPage() {
             loadContacts();
         } catch (error) {
             console.error(error);
-            throw error;
         }
     };
 
@@ -92,7 +95,7 @@ export default function PhonebookPage() {
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('touchmove', handleScroll);
         };
-    }, [query.limit, total, setQuery]);
+    }, [query.limit, query.sortMode, query.sortBy, total, query.search]);
 
     return (
         <>

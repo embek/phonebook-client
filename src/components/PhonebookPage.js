@@ -25,7 +25,7 @@ export default function PhonebookPage() {
     const removeContact = async (id) => {
         try {
             await api.delete(`api/phonebooks/${id}`);
-            setContacts(prev => prev.filter(contact => contact.id !== id));
+            loadContacts();
         } catch (error) {
             console.error(error);
         }
@@ -34,11 +34,23 @@ export default function PhonebookPage() {
     const updateContact = async (id, name, phone) => {
         try {
             await api.put(`api/phonebooks/${id}`, { name, phone });
-            setContacts(prev => prev.map(contact =>
-                contact.id === id ? { ...contact, name, phone } : contact
-            ))
+            loadContacts();
         } catch (error) {
             console.error(error);
+        }
+    };
+
+    const handleUpdateAvatar = async (id, formData) => {
+        try {
+            await api.put(`api/phonebooks/${id}/avatar`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            loadContacts();
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     };
 
@@ -61,7 +73,7 @@ export default function PhonebookPage() {
     useEffect(() => {
         const checkAndLoadMoreContacts = () => {
             if (document.body.scrollHeight <= window.visualViewport.height && query.limit <= total) {
-                setQuery(prev => ({ ...prev, limit: prev.limit + 5 }));
+                setQuery(prev => ({ ...prev, limit: prev.limit + 3 }));
             }
         };
 
@@ -109,6 +121,7 @@ export default function PhonebookPage() {
                 contacts={contacts}
                 updateContact={updateContact}
                 onShowDeleteModal={(id) => setDeleteModal({ isOpen: true, contactIdToDelete: id })}
+                onUpdateAvatar={handleUpdateAvatar}
             />
             <DeleteModal
                 contact={contacts.find(c => c.id === deleteModal.contactIdToDelete)}

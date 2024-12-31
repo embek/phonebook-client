@@ -1,27 +1,35 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { api } from "../api/contactsAPI";
 
-export default function AddPage({ onAddContact }) {
+export default function AddPage() {
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
 
-    const handleSubmit = () => {
-        if (name && phone) {
-            onAddContact(name, phone);
+    const handleSubmit = async () => {
+        if (!name.trim() || !phone.trim()) {
+            alert('Please fill in both name and phone');
+            return;
+        }
+
+        try {
+            await api.post('api/phonebooks', { name: name.trim(), phone: phone.trim() });
             navigate('/');
+        } catch (error) {
+            alert('Failed to add contact: ' + error.message);
         }
     };
 
     return (
         <div className="add-form">
-            <div><input 
-                className="custom-input" 
+            <div><input
+                className="custom-input"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Name"
             /></div>
-            <div><input 
+            <div><input
                 className="custom-input"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}

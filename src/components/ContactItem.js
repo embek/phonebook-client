@@ -8,9 +8,18 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
 
     const handleEditClick = () => setIsEditing(true);
 
-    const handleSaveClick = () => {
-        onUpdateContact(contact.id, editForm.name, editForm.phone);
-        setIsEditing(false);
+    const handleSaveClick = async () => {
+        if (!editForm.name.trim() || !editForm.phone.trim()) {
+            alert('Please fill in both name and phone');
+            return;
+        }
+
+        try {
+            await onUpdateContact(contact.id, editForm.name.trim(), editForm.phone.trim());
+            setIsEditing(false);
+        } catch (error) {
+            alert('Failed to update contact: ' + error.message);
+        }
     };
 
     const handleInputChange = (field, value) => {
@@ -19,7 +28,9 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
 
     return (
         <div className="contact-box col-s-3 col-2">
-            {/* ...existing avatar code... */}
+            <div>
+                <img className="avatar" src={contact.avatar ? `http://192.168.1.20:3000/images/${contact.avatar}` : '/default-avatar.png'} alt={contact.avatar} />
+            </div>
             <div className="contact-detail">
                 {isEditing ? (
                     <>
@@ -42,7 +53,9 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
                 )}
                 <div>
                     {isEditing ? (
-                        <button onClick={handleSaveClick}><FontAwesomeIcon icon={faSave} /></button>
+                        <>
+                            <button onClick={handleSaveClick}><FontAwesomeIcon icon={faSave} /></button>
+                        </>
                     ) : (
                         <>
                             <button onClick={handleEditClick}><FontAwesomeIcon icon={faEdit} /></button>
@@ -51,6 +64,6 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

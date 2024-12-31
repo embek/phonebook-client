@@ -1,34 +1,35 @@
-import ContactList from "../containers/ContactsList";
-import DeleteModal from "../containers/DeleteModal";
+import ContactList from "./ContactsList";
+import DeleteModal from "./DeleteModal";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpAZ, faArrowDownAZ, faSearch, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { loadContacts, toggleSort, setQuery } from "../actions/contacts";
 
-export default function PhonebookPage() {
+export default function PhonebookPage({ 
+    contacts, 
+    query, 
+    setQuery, 
+    deleteModal, 
+    setDeleteModal, 
+    removeContact,
+    updateContact 
+}) {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const sortMode = useSelector(state => state.query.sortMode);
-    const searchQuery = useSelector(state => state.query.search);
-    const limit = useSelector(state => state.query.limit);
-    const totalContacts = useSelector(state => state.query.total);
 
     useEffect(() => {
         const checkAndLoadMoreContacts = () => {
             if (document.body.scrollHeight <= window.visualViewport.height) {
-                dispatch(setQuery({ limit: limit + 1 }));
+                setQuery(prev => ({ ...prev, limit: prev.limit + 1 }));
             }
         };
 
         const handleScroll = () => {
-            if (window.visualViewport.height + document.documentElement.scrollTop === document.body.scrollHeight && limit <= totalContacts) {
-                dispatch(setQuery({ limit: limit + 5 }));
+            if (window.visualViewport.height + document.documentElement.scrollTop === document.body.scrollHeight && query.limit <= query.total) {
+                setQuery(prev => ({ ...prev, limit: prev.limit + 5 }));
             }
         };
 
-        dispatch(loadContacts()).then(checkAndLoadMoreContacts);
+        checkAndLoadMoreContacts();
         window.addEventListener('resize', checkAndLoadMoreContacts);
         window.addEventListener('scroll', handleScroll);
         window.addEventListener('touchmove', handleScroll);
@@ -37,32 +38,44 @@ export default function PhonebookPage() {
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('touchmove', handleScroll);
         };
-    }, [dispatch, limit, totalContacts]);
-
-    const handleSearchChange = (e) => {
-        dispatch(setQuery({ search: e.target.value }));
-    };
+    }, [query.limit, query.total, setQuery]);
 
     return (
         <>
             <div className="topbar">
-                <button className="sort" onClick={() => dispatch(toggleSort())}>
-                    <FontAwesomeIcon icon={sortMode === 'DESC' ? faArrowUpAZ : faArrowDownAZ} />
+                <button className="sort" onClick={() => 
+                    setQuery(prev => ({ 
+                        ...prev, 
+                        sortMode: prev.sortMode === 'ASC' ? 'DESC' : 'ASC' 
+                    }))
+                }>
+                    <FontAwesomeIcon icon={query.sortMode === 'DESC' ? faArrowUpAZ : faArrowDownAZ} />
                 </button>
                 <i className="mag-glass"><FontAwesomeIcon icon={faSearch} /></i>
                 <input
                     id="search"
                     type="text"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
+                    value={query.search}
+                    onChange={(e) => setQuery(prev => ({ ...prev, search: e.target.value }))}
                     placeholder="Search contacts..."
-                ></input>
+                />
                 <button className="add" onClick={() => navigate('/add')}>
                     <FontAwesomeIcon icon={faUserPlus} />
                 </button>
             </div>
-            <ContactList />
-            <DeleteModal />
+            <ContactList 
+                contacts={contacts}
+                updateContact={updateContact}
+                onShowDeleteModal={(id) => setDeleteModal({ isOpen: true, contactIdToDelete: id })}
+            />
+            <DeleteModal 
+                contact={contacts.find(c => c.id === deleteModal.contactIdToDelete)}
+                onConfirm={(id) => {
+                    removeContact(id);
+                    setDeleteModal({ isOpen: false, contactIdToDelete: null });
+                }}
+                onCancel={() => setDeleteModal({ isOpen: false, contactIdToDelete: null })}
+            />
         </>
     );
 }

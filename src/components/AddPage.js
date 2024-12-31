@@ -1,17 +1,14 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { addContact } from "../actions/contacts";
 
-export default function AddPage() {
+export default function AddPage({ onAddContact }) {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
 
     const handleSubmit = () => {
         if (name && phone) {
-            dispatch(addContact(name, phone));
+            onAddContact(name, phone);
             navigate('/');
         }
     };

@@ -1,59 +1,82 @@
-// import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import '@fortawesome/fontawesome-free';
-
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-import ErrorPage from './components/ErrorPage';
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PhonebookPage from './components/PhonebookPage';
 import AddPage from './components/AddPage';
-import { legacy_createStore as createStore, applyMiddleware } from 'redux';
-import { thunk } from 'redux-thunk';
-import rootReducer from './reducers';
-import { Provider } from 'react-redux';
+import ErrorPage from './components/ErrorPage';
+import axios from "axios";
 
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { PersistGate } from 'redux-persist/integration/react'
-
-const persistConfig = {
-  key: 'root',
-  storage,
-}
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-const store = createStore(persistedReducer, applyMiddleware(thunk))
-const persistor = persistStore(store)
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <PhonebookPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/add",
-    element: <AddPage />,
-  },
-  {
-    future: {
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-      v7_fetcherPersist: true,
-      v7_normalizeFormMethod: true,
-      v7_partialHydration: true,
-      v7_skipActionErrorRevalidation: true,
-    },
-  }
-]);
+const api = axios.create({
+  baseURL: 'http://192.168.1.20:3000/',
+  timeout: 1000
+});
 
 function App() {
+  const [contacts, setContacts] = useState([]);
+  const [query, setQuery] = useState({
+    search: '',
+    sortMode: 'ASC',
+    limit: 10
+  });
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+    contactIdToDelete: null
+  });
+  const [total, setTotal] = useState(0);
+
+  const addContact = (name, phone) => {
+    setContacts(prev => [...prev, { id: Date.now(), name, phone }]);
+  };
+
+  const removeContact = (id) => {
+    setContacts(prev => prev.filter(contact => contact.id !== id));
+  };
+
+  const updateContact = (id, name, phone) => {
+    setContacts(prev => prev.map(contact =>
+      contact.id === id ? { ...contact, name, phone } : contact
+    ));
+  };
+
+  const loadContacts = async () => {
+    try {
+      const { data } = await api.get('api/phonebooks', {
+        params: query
+      });
+      setContacts(data.phonebooks);
+      setQuery(prev => ({
+        ...prev,
+        total: data.total
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <RouterProvider router={router} />
-      </PersistGate>
-    </Provider >
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PhonebookPage
+              contacts={contacts}
+              query={query}
+              setQuery={setQuery}
+              deleteModal={deleteModal}
+              setDeleteModal={setDeleteModal}
+              removeContact={removeContact}
+              updateContact={updateContact}
+              loadContacts={loadContacts}
+            />
+          }
+          errorElement={<ErrorPage />}
+        />
+        <Route
+          path="/add"
+          element={<AddPage onAddContact={addContact} />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

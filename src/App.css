@@ -37,7 +37,8 @@
 }
 
 button.add-page-button {
-  width: 95.7%;
+  box-sizing: border-box;
+  width: 95%;
   height: 3em;
   padding: 4px;
   background-color: #AF820F;
@@ -51,7 +52,15 @@ button.add-page-button {
 
   /* For tablets: */
   button.add-page-button {
-    width: 47.75%;
+    box-sizing: border-box;
+    width: 47.5%;
+    height: 3em;
+    padding: 4px;
+    background-color: #AF820F;
+    margin: 2px;
+    border-style: none;
+    text-decoration: none;
+    color: black;
   }
 
   .col-s-1 {
@@ -75,7 +84,8 @@ button.add-page-button {
 
   /* For desktop: */
   button.add-page-button {
-    width: 47.75%;
+    box-sizing: border-box;
+    width: 47.5%;
     height: 3em;
     padding: 4px;
     background-color: #AF820F;
@@ -188,12 +198,13 @@ button {
 }
 
 .custom-input {
-  width: 94.7%;
+  width: 95%;
   height: 2.5em;
   padding-left: 10px;
   margin: 2px auto;
   border-radius: 5px;
   border-style: ridge;
+  box-sizing: border-box;
 }
 
 button.add,

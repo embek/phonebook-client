@@ -1,17 +1,21 @@
 import { faEdit, faTrash, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 export default function ContactItem({ contact, onShowDeleteModal, onUpdateContact, onUpdateAvatar }) {
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ name: contact.name, phone: contact.phone });
-    const fileInputRef = useRef(null);
 
     const handleEditClick = () => setIsEditing(true);
 
     const handleSaveClick = async () => {
         if (!editForm.name.trim() || !editForm.phone.trim()) {
             alert('Please fill in both name and phone');
+            return;
+        }
+
+        if (!/^\d+$/.test(editForm.phone.trim())) {
+            alert('Phone number must contain only numeric characters');
             return;
         }
 
@@ -28,7 +32,7 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
     };
 
     const handleAvatarClick = () => {
-        fileInputRef.current.click();
+        document.getElementById(`avatar-input-${contact.id}`).click();
     };
 
     const handleAvatarChange = async (e) => {
@@ -48,16 +52,16 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
     return (
         <div className="contact-box col-s-3 col-2">
             <div>
-                <img 
-                    className="avatar" 
-                    src={contact.avatar ? `http://192.168.1.20:3000/images/${contact.avatar}` : '/default-avatar.png'} 
+                <img
+                    className="avatar"
+                    src={contact.avatar ? `http://192.168.1.20:3000/images/${contact.avatar}` : '/default-avatar.png'}
                     alt={contact.avatar}
                     onClick={handleAvatarClick}
                     style={{ cursor: 'pointer' }}
                 />
                 <input
                     type="file"
-                    ref={fileInputRef}
+                    id={`avatar-input-${contact.id}`}
                     onChange={handleAvatarChange}
                     style={{ display: 'none' }}
                     accept="image/*"
@@ -85,9 +89,7 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
                 )}
                 <div>
                     {isEditing ? (
-                        <>
-                            <button onClick={handleSaveClick}><FontAwesomeIcon icon={faSave} /></button>
-                        </>
+                        <button onClick={handleSaveClick}><FontAwesomeIcon icon={faSave} /></button>
                     ) : (
                         <>
                             <button onClick={handleEditClick}><FontAwesomeIcon icon={faEdit} /></button>

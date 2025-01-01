@@ -9,7 +9,7 @@ import { api } from "../api/contactsAPI";
 export default function PhonebookPage() {
     const [contacts, setContacts] = useState([]);
     const [total, setTotal] = useState(0);
-    const [query, setQuery] = useState(JSON.parse(localStorage.getItem('query')) || {
+    const [query, setQuery] = useState(JSON.parse(sessionStorage.getItem('query')) || {
         limit: 5,
         search: '',
         sortMode: 'ASC',
@@ -23,7 +23,7 @@ export default function PhonebookPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        localStorage.setItem('query', JSON.stringify(query));
+        sessionStorage.setItem('query', JSON.stringify(query));
     }, [query])
 
     const removeContact = async (id) => {

@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { api } from "../api/contactsAPI";
 
 export default function PhonebookPage() {
+    const navigate = useNavigate();
+
     const [contacts, setContacts] = useState([]);
     const [total, setTotal] = useState(0);
     const [query, setQuery] = useState(JSON.parse(sessionStorage.getItem('query')) || {
@@ -20,11 +22,15 @@ export default function PhonebookPage() {
         contactIdToDelete: null
     });
 
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        sessionStorage.setItem('query', JSON.stringify(query));
-    }, [query])
+    const loadContacts = async () => {
+        try {
+            const { data } = await api.get('api/phonebooks', { params: query });
+            setContacts(data.phonebooks);
+            setTotal(data.total);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const removeContact = async (id) => {
         try {
@@ -47,9 +53,7 @@ export default function PhonebookPage() {
     const handleUpdateAvatar = async (id, formData) => {
         try {
             await api.put(`api/phonebooks/${id}/avatar`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+                headers: { 'Content-Type': 'multipart/form-data' }
             });
             loadContacts();
         } catch (error) {
@@ -57,23 +61,13 @@ export default function PhonebookPage() {
         }
     };
 
-    const loadContacts = async () => {
-        try {
-            const { data } = await api.get('api/phonebooks', {
-                params: query
-            });
-            setContacts(data.phonebooks);
-            setTotal(data.total);
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    useEffect(() => {
+        sessionStorage.setItem('query', JSON.stringify(query));
+    }, [query]);
 
     useEffect(() => {
         loadContacts();
-    }, [query.limit, query.search, query.sortMode, query.sortBy]);
 
-    useEffect(() => {
         const checkAndLoadMoreContacts = () => {
             if (document.body.scrollHeight <= window.visualViewport.height && query.limit <= total) {
                 setQuery(prev => ({ ...prev, limit: prev.limit + 3 }));
@@ -90,12 +84,13 @@ export default function PhonebookPage() {
         window.addEventListener('resize', checkAndLoadMoreContacts);
         window.addEventListener('scroll', handleScroll);
         window.addEventListener('touchmove', handleScroll);
+
         return () => {
             window.removeEventListener('resize', checkAndLoadMoreContacts);
             window.removeEventListener('scroll', handleScroll);
             window.removeEventListener('touchmove', handleScroll);
         };
-    }, [query.limit, query.sortMode, query.sortBy, total, query.search]);
+    }, [query.limit, query.search, query.sortMode, query.sortBy, total]);
 
     return (
         <>
@@ -113,7 +108,7 @@ export default function PhonebookPage() {
                     id="search"
                     type="text"
                     value={query.search}
-                    onChange={(e) => setQuery(prev => ({ ...prev, search: e.target.value }))}
+                    onChange={(e) => setQuery(prev => ({ ...prev, search: e.target.value, limit: 5 }))}
                     placeholder="Search contacts..."
                 />
                 <button className="add" onClick={() => navigate('/add')}>

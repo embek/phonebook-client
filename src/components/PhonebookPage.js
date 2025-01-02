@@ -1,5 +1,5 @@
-import ContactList from "../containers/ContactsList";
-import DeleteModal from "../containers/DeleteModal";
+import ContactList from "./ContactsList";
+import DeleteModal from "./DeleteModal";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpAZ, faArrowDownAZ, faSearch, faUserPlus } from '@fortawesome/free-solid-svg-icons';

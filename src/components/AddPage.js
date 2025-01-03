@@ -6,10 +6,23 @@ export default function AddPage() {
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
+    
+    const handlePhoneChange = (e) => {
+        const value = e.target.value;
+        if (value === '' || /^[0-9]+$/.test(value)) {
+            setPhone(value);
+        }
+    };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         if (!name.trim() || !phone.trim()) {
             alert('Please fill in both name and phone');
+            return;
+        }
+
+        if (!/^[0-9]+$/.test(phone)) {
+            alert('Phone number must contain only numbers');
             return;
         }
 
@@ -22,23 +35,25 @@ export default function AddPage() {
     };
 
     return (
-        <div className="add-form">
+        <form className="add-form" onSubmit={handleSubmit}>
             <input
                 className="custom-input"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Name"
+                required
             />
             <input
                 className="custom-input"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={handlePhoneChange}
                 placeholder="Phone"
+                required
             />
             <div>
-                <button className="add-page-button" onClick={handleSubmit}>save</button>
-                <button className="add-page-button" onClick={() => navigate('/')}>cancel</button>
+                <button type="submit" className="add-page-button">save</button>
+                <button type="button" className="add-page-button" onClick={() => navigate('/')}>cancel</button>
             </div>
-        </div>
+        </form>
     );
 }

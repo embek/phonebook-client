@@ -57,27 +57,25 @@ export default function PhonebookPage() {
     useEffect(() => {
         loadContacts();
 
-        const checkAndLoadMoreContacts = () => {
-            if (document.body.scrollHeight <= window.visualViewport.height && query.limit <= total) {
-                setQuery(prev => ({ ...prev, limit: prev.limit + 3 }));
-            }
-        };
+        const sentinel = document.createElement('div');
+        sentinel.style.height = '40px';
+        // sentinel.style.border = '1px solid black';
+        document.body.appendChild(sentinel);
 
-        const handleScroll = () => {
-            if (window.visualViewport.height + document.documentElement.scrollTop === document.body.scrollHeight && query.limit <= total) {
+        const observer = new IntersectionObserver((entries) => {
+            const [entry] = entries;
+            if (entry.isIntersecting && query.limit <= total) {
                 setQuery(prev => ({ ...prev, limit: prev.limit + 5 }));
             }
-        };
+        }, {
+            threshold: 0.7
+        });
 
-        checkAndLoadMoreContacts();
-        window.addEventListener('resize', checkAndLoadMoreContacts);
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('touchmove', handleScroll);
+        observer.observe(sentinel);
 
         return () => {
-            window.removeEventListener('resize', checkAndLoadMoreContacts);
-            window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('touchmove', handleScroll);
+            observer.disconnect();
+            sentinel.remove();
         };
     }, [query.limit, query.search, query.sortMode, query.sortBy, total]);
 

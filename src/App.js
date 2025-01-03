@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PhonebookPage from './components/PhonebookPage';
 import AddPage from './components/AddPage';
 import ErrorPage from './components/ErrorPage';
+import AvatarPage from './components/AvatarPage';
 import './App.css';
 
 function App() {
@@ -16,6 +17,10 @@ function App() {
         <Route
           path="/add"
           element={<AddPage />}
+        />
+        <Route
+          path="/avatar/:id"
+          element={<AvatarPage />}
         />
       </Routes>
     </BrowserRouter>

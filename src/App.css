@@ -324,3 +324,70 @@ div.contact-detail {
   border-radius: 4px;
   box-sizing: border-box;
 }
+
+.avatar-page {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.avatar-page form {
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  border: 2px ridge #191919;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-page h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.avatar-page .button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.avatar-page button {
+  width: 47.5%;
+  height: 3em;
+  padding: 4px;
+  background-color: #AF820F;
+  margin: 2px auto;
+  border-style: none;
+  text-decoration: none;
+  color: black;
+  border-radius: 5px;
+}
+
+.avatar-page button:hover {
+  background-color: #8B6B0E;
+  cursor: pointer;
+}
+
+.avatar-page button:disabled {
+  background-color: #CCCCCC;
+  cursor: not-allowed;
+}
+
+.avatar-preview {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 20px auto;
+  border: 0.5px ridge gray;
+}

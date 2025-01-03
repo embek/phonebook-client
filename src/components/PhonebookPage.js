@@ -50,17 +50,6 @@ export default function PhonebookPage() {
         }
     };
 
-    const handleUpdateAvatar = async (id, formData) => {
-        try {
-            await api.put(`api/phonebooks/${id}/avatar`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-            loadContacts();
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     useEffect(() => {
         sessionStorage.setItem('query', JSON.stringify(query));
     }, [query]);
@@ -119,7 +108,6 @@ export default function PhonebookPage() {
                 contacts={contacts}
                 updateContact={updateContact}
                 onShowDeleteModal={(id) => setDeleteModal({ isOpen: true, contactIdToDelete: id })}
-                onUpdateAvatar={handleUpdateAvatar}
             />
             <DeleteModal
                 contact={contacts.find(c => c.id === deleteModal.contactIdToDelete)}

@@ -21,8 +21,8 @@ export default function PhonebookPage() {
         return contactsList
             .filter(contact => {
                 const searchTerm = query.search.toLowerCase();
-                return contact.name.toLowerCase().includes(searchTerm) || 
-                       contact.phone.includes(searchTerm);
+                return contact.name.toLowerCase().includes(searchTerm) ||
+                    contact.phone.includes(searchTerm);
             })
             .sort((a, b) => {
                 const modifier = query.sortMode === 'ASC' ? 1 : -1;
@@ -41,16 +41,19 @@ export default function PhonebookPage() {
             const { data } = await api.get('api/phonebooks', { params: query });
             const offlineContacts = JSON.parse(sessionStorage.getItem('local_contacts') || '[]');
             const pendingContacts = offlineContacts.filter(c => !c.status?.sent);
-            
-            const allContacts = [
-                ...pendingContacts,
-                ...data.phonebooks.map(contact => ({
+
+            const serverContacts = data.phonebooks
+                .filter(serverContact => !pendingContacts.some(
+                    pending => pending.id === serverContact.id)
+                )
+                .map(contact => ({
                     ...contact,
                     status: { sent: true, operation: null }
-                }))
-            ];
+                }));
 
-            updateLocalContacts(allContacts);
+            const allContacts = [...pendingContacts, ...serverContacts];
+            sessionStorage.setItem('local_contacts', JSON.stringify(allContacts));
+            setContacts(allContacts);
         } catch (error) {
             console.error('Failed to load contacts:', error);
             const storedContacts = JSON.parse(sessionStorage.getItem('local_contacts') || '[]');
@@ -77,6 +80,8 @@ export default function PhonebookPage() {
                         c.id === id ? { ...c, id: data.id, status: { sent: true, operation: null } } : c
                     ));
                     break;
+                default:
+                    console.error(`Unknown operation: ${operation}`);
             }
         } catch (error) {
             console.error(`Failed to ${operation} contact:`, error);
@@ -110,7 +115,7 @@ export default function PhonebookPage() {
             observer.disconnect();
             sentinel.remove();
         };
-    }, [query]);
+    }, [query, contacts.length]);
 
     return (
         <>

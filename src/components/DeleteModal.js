@@ -7,7 +7,7 @@ export default function DeleteModal({ contact, onConfirm, onCancel }) {
         try {
             await onConfirm(contact.id);
         } catch (error) {
-            alert('Failed to delete contact: ' + error.message);
+            console.log(error.message);
         }
     };
 

@@ -154,6 +154,25 @@ img.avatar {
   /* Mobile first - single column */
   width: 100%;
   box-sizing: border-box;
+  transition: opacity 0.3s ease;
+}
+
+.contact-box.unsent {
+  opacity: 0.6;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.retry-btn {
+  background-color: #888;
+}
+
+.retry-btn:hover {
+  background-color: #666;
 }
 
 /* Tablet view (600px and up) */

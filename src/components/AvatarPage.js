@@ -14,7 +14,7 @@ export default function AvatarPage() {
                 const response = await api.get(`api/phonebooks/${id}`);
                 if (response.data.avatar) setCurrentAvatar(`http://192.168.1.20:3000/images/${response.data.avatar}`);
             } catch (error) {
-                console.error('Failed to fetch avatar:', error);
+                console.log(error.message);
             }
         };
         fetchAvatar();
@@ -39,7 +39,7 @@ export default function AvatarPage() {
             });
             navigate('/');
         } catch (error) {
-            alert('Failed to update avatar: ' + error.message);
+            console.log(error.message);
         }
     };
 

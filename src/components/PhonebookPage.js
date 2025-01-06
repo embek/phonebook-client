@@ -18,16 +18,15 @@ export default function PhonebookPage() {
     const [deleteModal, setDeleteModal] = useState({ isOpen: false, contactIdToDelete: null });
 
     const filterAndSortContacts = (contactsList) => {
+        const searchTerm = query.search.toLowerCase();
+        const modifier = query.sortMode === 'ASC' ? 1 : -1;
+        
         return contactsList
-            .filter(contact => {
-                const searchTerm = query.search.toLowerCase();
-                return contact.name.toLowerCase().includes(searchTerm) ||
-                    contact.phone.includes(searchTerm);
-            })
-            .sort((a, b) => {
-                const modifier = query.sortMode === 'ASC' ? 1 : -1;
-                return modifier * a[query.sortBy].localeCompare(b[query.sortBy]);
-            })
+            .filter(contact => 
+                contact.name.toLowerCase().includes(searchTerm) ||
+                contact.phone.includes(searchTerm)
+            )
+            .sort((a, b) => modifier * a[query.sortBy].localeCompare(b[query.sortBy]))
             .slice(0, query.limit);
     };
 
@@ -39,29 +38,28 @@ export default function PhonebookPage() {
     const loadContacts = async () => {
         try {
             const { data } = await api.get('api/phonebooks', { params: query });
-            const offlineContacts = JSON.parse(sessionStorage.getItem('local_contacts') || '[]');
-            const pendingContacts = offlineContacts.filter(c => !c.status?.sent);
-
+            const localContacts = JSON.parse(sessionStorage.getItem('local_contacts') || '[]');
+            const pendingContacts = localContacts.filter(c => !c.status?.sent);
+            
             const serverContacts = data.phonebooks
-                .filter(serverContact => !pendingContacts.some(
-                    pending => pending.id === serverContact.id)
-                )
-                .map(contact => ({
-                    ...contact,
-                    status: { sent: true, operation: null }
-                }));
+                .filter(server => !pendingContacts.find(local => local.id === server.id))
+                .map(contact => ({ ...contact, status: { sent: true, operation: null } }));
 
-            const allContacts = [...pendingContacts, ...serverContacts];
-            sessionStorage.setItem('local_contacts', JSON.stringify(allContacts));
-            setContacts(allContacts);
+            updateLocalContacts([...pendingContacts, ...serverContacts]);
         } catch (error) {
             console.error('Failed to load contacts:', error);
-            const storedContacts = JSON.parse(sessionStorage.getItem('local_contacts') || '[]');
-            updateLocalContacts(storedContacts);
+            updateLocalContacts(JSON.parse(sessionStorage.getItem('local_contacts') || '[]'));
         }
     };
 
     const handleContactOperation = async (operation, id, contactData = null) => {
+        const updateContactStatus = (success, newData = null) => {
+            const status = success ? { sent: true, operation: null } : { sent: false, operation };
+            updateLocalContacts(contacts.map(c => 
+                c.id === id ? { ...c, ...(newData || contactData), status } : c
+            ));
+        };
+
         try {
             switch (operation) {
                 case 'delete':
@@ -70,26 +68,18 @@ export default function PhonebookPage() {
                     break;
                 case 'update':
                     await api.put(`api/phonebooks/${id}`, contactData);
-                    updateLocalContacts(contacts.map(c =>
-                        c.id === id ? { ...c, ...contactData, status: { sent: true, operation: null } } : c
-                    ));
+                    updateContactStatus(true);
                     break;
                 case 'retry-add':
                     const { data } = await api.post('api/phonebooks', contactData);
-                    updateLocalContacts(contacts.map(c =>
-                        c.id === id ? { ...c, id: data.id, status: { sent: true, operation: null } } : c
-                    ));
+                    updateContactStatus(true, { id: data.id });
                     break;
                 default:
                     console.error(`Unknown operation: ${operation}`);
             }
         } catch (error) {
             console.error(`Failed to ${operation} contact:`, error);
-            if (operation !== 'retry-add') {
-                updateLocalContacts(contacts.map(c =>
-                    c.id === id ? { ...c, ...contactData, status: { sent: false, operation } } : c
-                ));
-            }
+            if (operation !== 'retry-add') updateContactStatus(false);
         }
     };
 

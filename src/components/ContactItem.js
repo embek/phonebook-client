@@ -71,7 +71,7 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
     };
 
     return (
-        <div className={`contact-box col-s-3 col-2 ${!contact.status?.sent ? 'unsent' : ''}`}>
+        <div className={`contact-box col-s-3 col-2 ${!contact.status?.sent ? 'unsent' : ''}`} data-testid="contact-box">
             <div>
                 <img
                     className="avatar"

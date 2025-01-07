@@ -8,8 +8,6 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ name: contact.name, phone: contact.phone });
 
-    const handleEditClick = () => setIsEditing(true);
-
     const handleSaveClick = async () => {
         if (!editForm.name.trim() || !editForm.phone.trim()) {
             alert('Please fill in both name and phone');
@@ -105,13 +103,16 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
                         <button onClick={handleSaveClick}><FontAwesomeIcon icon={faSave} /></button>
                     ) : (
                         <>
-                            <button onClick={handleEditClick}><FontAwesomeIcon icon={faEdit} /></button>
-                            <button onClick={() => onShowDeleteModal(contact.id)}><FontAwesomeIcon icon={faTrash} /></button>
-                            {!contact.status?.sent && (
+                            {!contact.status?.sent ?
                                 <button onClick={handleRetry} className="retry-btn">
                                     <FontAwesomeIcon icon={faRotateRight} />
                                 </button>
-                            )}
+                                :
+                                <>
+                                    <button onClick={() => setIsEditing(true)}><FontAwesomeIcon icon={faEdit} /></button>
+                                    <button onClick={() => onShowDeleteModal(contact.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                                </>
+                            }
                         </>
                     )}
                 </div>

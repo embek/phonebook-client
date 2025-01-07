@@ -117,7 +117,7 @@ export default function PhonebookPage() {
                         sortMode: prev.sortMode === 'ASC' ? 'DESC' : 'ASC'
                     }))}
                 >
-                    <FontAwesomeIcon icon={query.sortMode === 'DESC' ? faArrowUpAZ : faArrowDownAZ} />
+                    <FontAwesomeIcon icon={query.sortMode === 'DESC' ? faArrowDownAZ : faArrowUpAZ } />
                 </button>
                 <i className="mag-glass"><FontAwesomeIcon icon={faSearch} /></i>
                 <input

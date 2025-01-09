@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from "../api/contactsAPI";
+import { useCustomContext } from './CustomContext';
+import { updateAvatar } from '../actions/contacts';
 
 export default function AvatarPage() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { dispatch } = useCustomContext();
     const [currentAvatar, setCurrentAvatar] = useState('http://192.168.1.20:3001/default-avatar.png');
     let selectedFile = null;
 
@@ -29,14 +32,8 @@ export default function AvatarPage() {
         e.preventDefault();
         if (!selectedFile) return;
 
-        const formData = new FormData();
-        formData.append('avatar', selectedFile);
-        console.log('formData:', formData);
-
         try {
-            await api.put(`api/phonebooks/${id}/avatar`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            await updateAvatar(dispatch, id, selectedFile);
             navigate('/');
         } catch (error) {
             console.log(error.message);

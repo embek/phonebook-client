@@ -2,33 +2,36 @@ import { faEdit, faTrash, faSave, faRotateRight } from "@fortawesome/free-solid-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCustomContext } from './CustomContext';
+import { updateContact, resendContact } from '../actions/contacts';
 
-export default function ContactItem({ contact, onShowDeleteModal, onUpdateContact, retryAdd }) {
+export default function ContactItem({ contact }) {
+    const { dispatch } = useCustomContext();
     const navigate = useNavigate();
-    const [isEditing, setIsEditing] = useState(false);
-    const [editForm, setEditForm] = useState({ name: contact.name, phone: contact.phone });
+    const [isEdit, setIsEdit] = useState(false);
+    const [formData, setFormData] = useState({ name: contact.name, phone: contact.phone });
 
     const handleSaveClick = async () => {
-        if (!editForm.name.trim() || !editForm.phone.trim()) {
+        if (!formData.name.trim() || !formData.phone.trim()) {
             alert('Please fill in both name and phone');
             return;
         }
 
-        if (!/^\d+$/.test(editForm.phone.trim())) {
+        if (!/^\d+$/.test(formData.phone.trim())) {
             alert('Phone number must contain only numeric characters');
             return;
         }
 
         try {
-            await onUpdateContact(contact.id, editForm.name.trim(), editForm.phone.trim());
-            setIsEditing(false);
+            await updateContact(dispatch, contact.id, formData.name, formData.phone);
+            setIsEdit(false);
         } catch (error) {
             console.log(error.message);
         }
     };
 
     const handleInputChange = (field, value) => {
-        setEditForm(prev => ({ ...prev, [field]: value }));
+        setFormData(prev => ({ ...prev, [field]: value }));
     };
 
     const handleAvatarClick = () => {
@@ -55,17 +58,24 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
                 await handleSaveClick();
                 break;
             case 'delete':
-                onShowDeleteModal(contact.id);
+                dispatch({ type: 'SHOW_DELETE_MODAL', payload: { contactId: contact.id } });
                 break;
             case 'add':
-                await retryAdd(contact);
+                await resendContact(dispatch, contact);
                 break;
             default:
-                if (editForm.name !== contact.name || editForm.phone !== contact.phone) {
+                if (formData.name !== contact.name || formData.phone !== contact.phone) {
                     await handleSaveClick();
                 }
                 break;
         }
+    };
+
+    const handleDelete = () => {
+        dispatch({ 
+            type: 'TOGGLE_MODAL', 
+            payload: { isOpen: true, contactId: contact.id } 
+        });
     };
 
     return (
@@ -79,15 +89,15 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
                 />
             </div>
             <div className="contact-detail">
-                {isEditing ? (
+                {isEdit ? (
                     <>
                         <input
-                            value={editForm.name}
+                            value={formData.name}
                             onChange={(e) => handleInputChange('name', e.target.value)}
                             className="edit-input"
                         />
                         <input
-                            value={editForm.phone}
+                            value={formData.phone}
                             onChange={(e) => handleInputChange('phone', e.target.value)}
                             className="edit-input"
                         />
@@ -99,7 +109,7 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
                     </>
                 )}
                 <div className="contact-actions">
-                    {isEditing ? (
+                    {isEdit ? (
                         <button onClick={handleSaveClick}><FontAwesomeIcon icon={faSave} /></button>
                     ) : (
                         <>
@@ -109,8 +119,8 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
                                 </button>
                                 :
                                 <>
-                                    <button onClick={() => setIsEditing(true)}><FontAwesomeIcon icon={faEdit} /></button>
-                                    <button onClick={() => onShowDeleteModal(contact.id)}><FontAwesomeIcon icon={faTrash} /></button>
+                                    <button onClick={() => setIsEdit(true)}><FontAwesomeIcon icon={faEdit} /></button>
+                                    <button onClick={handleDelete}><FontAwesomeIcon icon={faTrash} /></button>
                                 </>
                             }
                         </>

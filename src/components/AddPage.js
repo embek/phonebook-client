@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../api/contactsAPI";
+import { addContact } from '../actions/contacts';
+import { useCustomContext } from "./CustomContext";
 
 export default function AddPage() {
+    const { dispatch } = useCustomContext();
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
-    
+
     const handleSubmit = async () => {
         const trimmedName = name.trim();
         const trimmedPhone = phone.trim();
@@ -22,12 +24,12 @@ export default function AddPage() {
         }
 
         try {
-            await api.post('api/phonebooks', { name: trimmedName, phone: trimmedPhone });
+            await addContact(dispatch, trimmedName, trimmedPhone);
             navigate('/');
         } catch (error) {
             const existingContacts = JSON.parse(sessionStorage.getItem('local_contacts') || '[]');
             sessionStorage.setItem('local_contacts', JSON.stringify([
-                { 
+                {
                     id: 'temp-' + Date.now(),
                     name: trimmedName,
                     phone: trimmedPhone,
@@ -57,15 +59,15 @@ export default function AddPage() {
                 type="tel"
             />
             <div>
-                <button 
-                    className="add-page-button" 
+                <button
+                    className="add-page-button"
                     onClick={handleSubmit}
                     data-testid="save-button"
                 >
                     save
                 </button>
-                <button 
-                    className="add-page-button" 
+                <button
+                    className="add-page-button"
                     onClick={() => navigate('/')}
                     data-testid="cancel-button"
                 >

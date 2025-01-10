@@ -61,23 +61,27 @@ A responsive React application for managing contacts with offline capabilities a
 ## Core Features
 
 ### Contact Management
+![Phonebook Page](https://github.com/embek/phonebook-client/blob/main/public/screenshots/desktop-view.png)
 - View contacts with name, phone number and avatar
 - Add, edit, and delete contacts
 - Infinite scroll for large contact lists
 - Confirmation dialog for deletions
 
 ### Offline Support
+![Offline](https://github.com/embek/phonebook-client/blob/main/public/screenshots/offline-mode-with-retry.png)
 - Full functionality without internet connection
 - Local storage for pending changes
 - Automatic retry of failed operations
 - Visual status indicators
 
 ### Search & Sort
+![Search Sort](https://github.com/embek/phonebook-client/blob/main/public/screenshots/mobile-view.png)
 - Search by name or phone number
 - Sort in ascending/descending order
 - Real-time filtering
 
 ### Avatar Management
+![Avatar Page](https://github.com/embek/phonebook-client/blob/main/public/screenshots/avatar-page-with-preview.png)
 - Image upload and preview
 - Default avatar fallback
 - Responsive image handling

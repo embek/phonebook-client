@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addContact } from '../actions/contacts';
-import { useCustomContext } from "./CustomContext";
+import { useContext } from "react";
+import { CustomContext } from "./CustomContext";
 
 export default function AddPage() {
-    const { dispatch } = useCustomContext();
+    const { dispatch } = useContext(CustomContext);
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");

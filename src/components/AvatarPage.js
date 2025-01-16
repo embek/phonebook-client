@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { api } from "../api/contactsAPI";
-import { useCustomContext } from './CustomContext';
+import { api } from "../services/api";
+import { CustomContext } from './CustomContext';
 import { updateAvatar } from '../actions/contacts';
 
 export default function AvatarPage() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { dispatch } = useCustomContext();
+    const { dispatch } = useContext(CustomContext);
     const [currentAvatar, setCurrentAvatar] = useState('http://192.168.1.20:3001/default-avatar.png');
     let selectedFile = null;
 

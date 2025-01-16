@@ -1,8 +1,17 @@
-import { createContext, useContext } from 'react';
+import { createContext, useReducer } from 'react';
+import { rootReducer, initialState } from '../reducers/rootReducer';
 
-const CustomContext = createContext();
-export default CustomContext;
+export const CustomContext = createContext();
 
-export function useCustomContext() {
-    return useContext(CustomContext);
+export function CustomContextProvider({ children }) {
+    const [state, dispatch] = useReducer(rootReducer, {
+        ...initialState,
+        query: JSON.parse(sessionStorage.getItem('query')) || initialState.query
+    });
+
+    return (
+        <CustomContext.Provider value={{ state, dispatch }}>
+            {children}
+        </CustomContext.Provider>
+    );
 }

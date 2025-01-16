@@ -1,28 +1,54 @@
-import DeleteModal from "./DeleteModal";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUpAZ, faArrowDownAZ, faSearch, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import { useEffect } from "react";
-import { useCustomContext } from './CustomContext';
-import ContactItem from './ContactItem';
-import { loadContacts, setQuery } from '../actions/contacts';
+import { useContext, useEffect } from "react";
+import { CustomContext } from "./CustomContext";
+import { updateContact, removeContact, resendContact, loadContacts } from '../actions/contacts';
+import ContactItem from "./ContactItem";
+import DeleteModal from "./DeleteModal";
 
 export default function PhonebookPage() {
     const navigate = useNavigate();
-    const { state, dispatch } = useCustomContext();
-    const { contacts, query } = state;
+    const { state, dispatch } = useContext(CustomContext);
+    const { contacts, modal, query } = state;
+
+    const handleQueryUpdate = (updates) => {
+        dispatch({ type: 'SET_QUERY', payload: updates });
+    };
+
+    const handleModal = (isOpen, contactId = null) => {
+        dispatch({
+            type: 'TOGGLE_MODAL',
+            payload: { isOpen, contactId }
+        });
+    };
 
     useEffect(() => {
+        sessionStorage.setItem('query', JSON.stringify(query));
         loadContacts(dispatch, state);
-    }, [query, dispatch]);
+
+        const sentinel = document.createElement('div');
+        sentinel.id = 'scroll-sentinel';
+        document.body.appendChild(sentinel);
+
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && contacts.length >= query.limit) {
+                handleQueryUpdate({ limit: query.limit + 5 });
+            }
+        });
+
+        observer.observe(sentinel);
+        return () => {
+            observer.disconnect();
+            sentinel.remove();
+        };
+    }, [query, contacts.length]);
 
     return (
         <>
             <div className="topbar">
-                <button
-                    className="sort"
-                    onClick={() => setQuery(dispatch, { sortMode: query.sortMode === 'ASC' ? 'DESC' : 'ASC' })}
-                >
+                <button className="sort"
+                    onClick={() => handleQueryUpdate({ sortMode: query.sortMode === 'ASC' ? 'DESC' : 'ASC' })}>
                     <FontAwesomeIcon icon={query.sortMode === 'DESC' ? faArrowDownAZ : faArrowUpAZ} />
                 </button>
                 <i className="mag-glass"><FontAwesomeIcon icon={faSearch} /></i>
@@ -30,19 +56,33 @@ export default function PhonebookPage() {
                     id="search"
                     type="text"
                     value={query.search}
-                    onChange={e => setQuery(dispatch, { search: e.target.value, limit: 5 })}
+                    onChange={e => handleQueryUpdate({ search: e.target.value, limit: 5 })}
                     placeholder="Search contacts..."
                 />
                 <button className="add" onClick={() => navigate('/add')}>
                     <FontAwesomeIcon icon={faUserPlus} />
                 </button>
             </div>
-            <div className="contacts-list" data-testid="contacts-list">
-                {contacts.map(contact => (
-                    <ContactItem key={contact.id} contact={contact} />
-                ))}
+            <div className="contacts-list">
+                {
+                    contacts.map(contact => (
+                        <ContactItem
+                            key={contact.id}
+                            contact={contact}
+                            onEdit={() => navigate(`/edit/${contact.id}`)}
+                            onDelete={() => handleModal(true, contact.id)}
+                        />
+                    ))
+                }
             </div>
-            <DeleteModal />
+            <DeleteModal
+                contact={contacts.find(c => c.id === modal.contactIdToDelete)}
+                onConfirm={async id => {
+                    await removeContact(dispatch, id);
+                    handleModal(false);
+                }}
+                onCancel={() => handleModal(false)}
+            />
         </>
     );
 }

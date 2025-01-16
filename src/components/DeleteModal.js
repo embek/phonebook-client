@@ -1,8 +1,9 @@
-import { useCustomContext } from './CustomContext';
+import { useContext } from 'react';
+import { CustomContext } from './CustomContext';
 import { removeContact } from '../actions/contacts';
 
 export default function DeleteModal() {
-    const { state, dispatch } = useCustomContext();
+    const { state, dispatch } = useContext(CustomContext);
     const { contacts, modal } = state;
     const { isOpen, contactIdToDelete } = modal;
 

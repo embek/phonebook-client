@@ -1,12 +1,12 @@
 import { faEdit, faTrash, faSave, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCustomContext } from './CustomContext';
+import { CustomContext } from './CustomContext';
 import { updateContact, resendContact } from '../actions/contacts';
 
 export default function ContactItem({ contact }) {
-    const { dispatch } = useCustomContext();
+    const { dispatch } = useContext(CustomContext);
     const navigate = useNavigate();
     const [isEdit, setIsEdit] = useState(false);
     const [formData, setFormData] = useState({ name: contact.name, phone: contact.phone });

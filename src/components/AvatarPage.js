@@ -5,14 +5,14 @@ import { api } from "../api/contactsAPI";
 export default function AvatarPage() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [currentAvatar, setCurrentAvatar] = useState('http://192.168.1.20:3001/default-avatar.png');
+    const [currentAvatar, setCurrentAvatar] = useState(`${process.env.REACT_APP_BASE_URL}/default-avatar.png`);
     let selectedFile = null;
 
     useEffect(() => {
         const fetchAvatar = async () => {
             try {
                 const response = await api.get(`api/phonebooks/${id}`);
-                if (response.data.avatar) setCurrentAvatar(`http://192.168.1.20:3000/images/${response.data.avatar}`);
+                if (response.data.avatar) setCurrentAvatar(`${process.env.REACT_APP_API_URL}/images/${response.data.avatar}`);
             } catch (error) {
                 console.log(error.message);
             }

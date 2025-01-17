@@ -32,7 +32,7 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
     };
 
     const handleAvatarClick = () => {
-        const avatarPath = contact.avatar ? `http://192.168.1.20:3000/images/${contact.avatar}` : '/default-avatar.png';
+        const avatarPath = contact.avatar ? `${process.env.REACT_APP_API_URL}/images/${contact.avatar}` : `${process.env.REACT_APP_BASE_URL}/default-avatar.png`;
         sessionStorage.setItem('currentAvatar', avatarPath);
         navigate(`/avatar/${contact.id}`);
     };
@@ -68,12 +68,13 @@ export default function ContactItem({ contact, onShowDeleteModal, onUpdateContac
         }
     };
 
+
     return (
         <div className={`contact-box col-s-3 col-2 ${!contact.status?.sent ? 'unsent' : ''}`} data-testid="contact-box">
             <div>
                 <img
                     className="avatar"
-                    src={contact.avatar ? `http://192.168.1.20:3000/images/${contact.avatar}` : '/default-avatar.png'}
+                    src={contact.avatar ? `${process.env.REACT_APP_API_URL}/images/${contact.avatar}` : '/default-avatar.png'}
                     alt="Avatar"
                     onClick={handleAvatarClick}
                 />

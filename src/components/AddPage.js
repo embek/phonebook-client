@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../api/contactsAPI";
+import { api } from "../services/api";
 
 export default function AddPage() {
     const navigate = useNavigate();

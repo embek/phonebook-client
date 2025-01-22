@@ -4,26 +4,29 @@ import AddPage from './components/AddPage';
 import ErrorPage from './components/ErrorPage';
 import AvatarPage from './components/AvatarPage';
 import './App.css';
+import { CustomContextProvider } from './components/CustomContext';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={<PhonebookPage />}
-          errorElement={<ErrorPage />}
-        />
-        <Route
-          path="/add"
-          element={<AddPage />}
-        />
-        <Route
-          path="/avatar/:id"
-          element={<AvatarPage />}
-        />
-      </Routes>
-    </BrowserRouter>
+    <CustomContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<PhonebookPage />}
+            errorElement={<ErrorPage />}
+          />
+          <Route
+            path="/add"
+            element={<AddPage />}
+          />
+          <Route
+            path="/avatar/:id"
+            element={<AvatarPage />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </CustomContextProvider>
   );
 }
 

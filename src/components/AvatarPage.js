@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { api } from "../api/contactsAPI";
+import { api } from "../services/api";
 
 export default function AvatarPage() {
     const { id } = useParams();

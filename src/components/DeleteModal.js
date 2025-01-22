@@ -1,19 +1,25 @@
+import { useContext } from "react";
+import { CustomContext } from "./CustomContext";
+import { handleContactOperation, setModal } from "../actions/contacts";
+
 export default function DeleteModal({ contact }) {
+    const { state, dispatch } = useContext(CustomContext);
+
     if (!contact) {
         return null;
     }
 
     const handleConfirm = async () => {
         try {
-            handleContactOperation('delete', id);
-            setDeleteModal({ isOpen: false, contactIdToDelete: null });
+            await handleContactOperation(dispatch, state, 'delete', contact.id);
+            setModal(dispatch, { isOpen: false, contactIdToDelete: null });
         } catch (error) {
             console.log(error.message);
         }
     };
 
     const handleCancel = () => {
-        setDeleteModal({ isOpen: false, contactIdToDelete: null })
+        setModal(dispatch, { isOpen: false, contactIdToDelete: null });
     }
 
     return (

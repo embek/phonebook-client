@@ -31,7 +31,6 @@ export default function AvatarPage() {
 
         const formData = new FormData();
         formData.append('avatar', selectedFile);
-        console.log('formData:', formData);
 
         try {
             await api.put(`api/phonebooks/${id}/avatar`, formData, {

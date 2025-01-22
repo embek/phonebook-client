@@ -12,7 +12,7 @@ export const initialState = {
     }
 }
 
-export function contactsReducer(state, action) {
+export function contactsReducer(state = initialState, action) {
     switch (action.type) {
         case 'SET_CONTACTS':
             return { ...state, contacts: action.payload };

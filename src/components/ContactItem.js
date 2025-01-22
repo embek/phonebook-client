@@ -1,11 +1,13 @@
 import { faEdit, faTrash, faSave, faRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleContactOperation, setModal } from "../actions/contacts";
+import { CustomContext } from "./CustomContext";
 
 export default function ContactItem({ contact }) {
     const navigate = useNavigate();
+    const { state, dispatch } = useContext(CustomContext);
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ name: contact.name, phone: contact.phone });
 
@@ -23,7 +25,7 @@ export default function ContactItem({ contact }) {
         }
 
         try {
-            handleContactOperation('update', contact.id, { name, phone })
+            await handleContactOperation(dispatch, state, 'update', contact.id, { name, phone });
             setIsEditing(false);
         } catch (error) {
             console.log(error.message);
@@ -57,7 +59,7 @@ export default function ContactItem({ contact }) {
     }
 
     const handleDelete = () => {
-        setModal({ isOpen: true, contactIdToDelete: contact.id })
+        setModal(dispatch, { isOpen: true, contactIdToDelete: contact.id });
     }
 
     const handleRetry = async () => {
@@ -69,7 +71,7 @@ export default function ContactItem({ contact }) {
                 await handleDelete();
                 break;
             case 'add':
-                await handleContactOperation('retry-add', contact.id, contact)
+                await handleContactOperation(dispatch, state, 'retry-add', contact.id, contact);
                 break;
             default:
                 if (editForm.name !== contact.name || editForm.phone !== contact.phone) {

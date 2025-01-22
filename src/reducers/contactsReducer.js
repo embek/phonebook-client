@@ -57,17 +57,21 @@ export function contactsReducer(state = initialState, action) {
             const updatedContacts = state.contacts.map(contact =>
                 contact.id === id ? { ...contact, ...changes, status } : contact
             );
+            const filteredContacts = filterAndSortContacts(updatedContacts, state.query);
+            sessionStorage.setItem('local_contacts', JSON.stringify(updatedContacts));
             return {
                 ...state,
-                contacts: filterAndSortContacts(updatedContacts, state.query)
+                contacts: filteredContacts
             };
         }
 
         case 'DELETE_CONTACT': {
             const updatedContacts = state.contacts.filter(c => c.id !== action.payload);
+            const filteredContacts = filterAndSortContacts(updatedContacts, state.query);
+            sessionStorage.setItem('local_contacts', JSON.stringify(updatedContacts));
             return {
                 ...state,
-                contacts: filterAndSortContacts(updatedContacts, state.query)
+                contacts: filteredContacts
             };
         }
 

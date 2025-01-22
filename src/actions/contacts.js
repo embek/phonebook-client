@@ -73,7 +73,7 @@ export const handleContactOperation = async ({ dispatch, operation, id, contactD
                 type: 'UPDATE_CONTACT',
                 payload: {
                     id,
-                    changes: {},
+                    changes: contactData,
                     status: { sent: false, operation }
                 }
             });

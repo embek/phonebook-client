@@ -3,7 +3,7 @@ import { CustomContext } from "./CustomContext";
 import { handleContactOperation, setModal } from "../actions/contacts";
 
 export default function DeleteModal({ contact }) {
-    const { state, dispatch } = useContext(CustomContext);
+    const { dispatch } = useContext(CustomContext);
 
     if (!contact) {
         return null;
@@ -11,15 +11,25 @@ export default function DeleteModal({ contact }) {
 
     const handleConfirm = async () => {
         try {
-            await handleContactOperation(dispatch, state, 'delete', contact.id);
-            setModal(dispatch, { isOpen: false, contactIdToDelete: null });
+            await handleContactOperation({
+                dispatch,
+                operation: 'delete',
+                id: contact.id
+            });
+            setModal({
+                dispatch,
+                modal: { isOpen: false, contactIdToDelete: null }
+            });
         } catch (error) {
             console.log(error.message);
         }
     };
 
     const handleCancel = () => {
-        setModal(dispatch, { isOpen: false, contactIdToDelete: null });
+        setModal({
+            dispatch,
+            modal: { isOpen: false, contactIdToDelete: null }
+        });
     }
 
     return (

@@ -54,7 +54,6 @@ export default function AddPage() {
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Phone"
                 data-testid="phone-input"
-                type="tel"
             />
             <div>
                 <button 

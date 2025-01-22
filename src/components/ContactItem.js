@@ -7,7 +7,7 @@ import { CustomContext } from "./CustomContext";
 
 export default function ContactItem({ contact }) {
     const navigate = useNavigate();
-    const { state, dispatch } = useContext(CustomContext);
+    const { dispatch } = useContext(CustomContext);
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ name: contact.name, phone: contact.phone });
 
@@ -25,7 +25,12 @@ export default function ContactItem({ contact }) {
         }
 
         try {
-            await handleContactOperation(dispatch, state, 'update', contact.id, { name, phone });
+            await handleContactOperation({
+                dispatch,
+                operation: 'update',
+                id: contact.id,
+                contactData: { name, phone }
+            });
             setIsEditing(false);
         } catch (error) {
             console.log(error.message);
@@ -59,7 +64,10 @@ export default function ContactItem({ contact }) {
     }
 
     const handleDelete = () => {
-        setModal(dispatch, { isOpen: true, contactIdToDelete: contact.id });
+        setModal({
+            dispatch,
+            modal: { isOpen: true, contactIdToDelete: contact.id }
+        });
     }
 
     const handleRetry = async () => {
@@ -71,7 +79,12 @@ export default function ContactItem({ contact }) {
                 await handleDelete();
                 break;
             case 'add':
-                await handleContactOperation(dispatch, state, 'retry-add', contact.id, contact);
+                await handleContactOperation({
+                    dispatch,
+                    operation: 'retry-add',
+                    id: contact.id,
+                    contactData: contact
+                });
                 break;
             default:
                 if (editForm.name !== contact.name || editForm.phone !== contact.phone) {

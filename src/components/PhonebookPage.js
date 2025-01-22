@@ -13,7 +13,7 @@ export default function PhonebookPage() {
 
     useEffect(() => {
         sessionStorage.setItem('query', JSON.stringify(state.query) || '{}');
-        loadContacts(dispatch, state);
+        loadContacts({ dispatch, query: state.query });
 
         const sentinel = document.createElement('div');
         sentinel.style.height = '40px';
@@ -22,7 +22,7 @@ export default function PhonebookPage() {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting && state.contacts.length >= state.query.limit) {
-                    setQuery(dispatch, { ...state.query, limit: state.query.limit + 5 });
+                    setQuery({ dispatch, query: { ...state.query, limit: state.query.limit + 5 } });
                 }
             },
             { threshold: 0.7 }
@@ -33,16 +33,19 @@ export default function PhonebookPage() {
             observer.disconnect();
             sentinel.remove();
         };
-    }, [state.query, state.contacts.length]);
+    }, [dispatch, state.query, state.contacts.length]);
 
     return (
         <>
             <div className="topbar">
                 <button
                     className="sort"
-                    onClick={() => setQuery(dispatch, {
-                        ...state.query,
-                        sortMode: state.query.sortMode === 'ASC' ? 'DESC' : 'ASC'
+                    onClick={() => setQuery({
+                        dispatch,
+                        query: {
+                            ...state.query,
+                            sortMode: state.query.sortMode === 'ASC' ? 'DESC' : 'ASC'
+                        }
                     })}
                 >
                     <FontAwesomeIcon icon={state.query.sortMode === 'DESC' ? faArrowDownAZ : faArrowUpAZ} />
@@ -52,7 +55,14 @@ export default function PhonebookPage() {
                     id="search"
                     type="text"
                     value={state.query.search}
-                    onChange={e => setQuery(dispatch, { ...state.query, search: e.target.value, limit: 5 })}
+                    onChange={e => setQuery({
+                        dispatch,
+                        query: {
+                            ...state.query,
+                            search: e.target.value,
+                            limit: 5
+                        }
+                    })}
                     placeholder="Search contacts..."
                 />
                 <button className="add" onClick={() => navigate('/add')}>

@@ -1,94 +1,83 @@
 import { api } from '../services/api';
-import { initialState } from '../reducers/contactsReducer';
 
-export const filterAndSortContacts = (state, contactsList) => {
-    const searchTerm = state.query.search.toLowerCase();
-    const modifier = state.query.sortMode === 'ASC' ? 1 : -1;
+export const setModal = ({ dispatch, modal }) => dispatch({
+    type: 'SET_MODAL',
+    payload: modal
+});
 
-    const sortedContacts = contactsList.sort((a, b) => {
-        if ((!a.status?.sent) && b.status?.sent) return -1;
-        if (a.status?.sent && (!b.status?.sent)) return 1;
-        return modifier * a[state.query.sortBy].localeCompare(b[state.query.sortBy]);
-    });
+export const setQuery = ({ dispatch, query }) => dispatch({
+    type: 'SET_QUERY',
+    payload: query
+});
 
-    return sortedContacts
-        .filter(contact =>
-            contact.name.toLowerCase().includes(searchTerm) ||
-            contact.phone.includes(searchTerm)
-        )
-        .slice(0, state.query.limit);
-};
-
-export const updateLocalContacts = (dispatch, state, newContacts) => {
-    // console.log('Updating local contacts:', newContacts);
-    sessionStorage.setItem('local_contacts', JSON.stringify(newContacts) || '[]');
-    setContacts(dispatch, filterAndSortContacts(state, newContacts));
-};
-
-export const loadContacts = async (dispatch, state = initialState) => {
+export const loadContacts = async ({ dispatch, query }) => {
+    const stored = JSON.parse(sessionStorage.getItem('local_contacts') || '[]');
     try {
-        const { data } = await api.get('api/phonebooks', { params: state.query });
-        const localContacts = JSON.parse(sessionStorage.getItem('local_contacts') || '[]');
-        const pendingContacts = localContacts.filter(c => !c.status?.sent);
+        const { data } = await api.get('api/phonebooks', { params: query });
+        const pending = stored.filter(c => !c.status?.sent);
 
-        const serverContacts = data.phonebooks
-            .filter(server => !pendingContacts.find(local => local.id === server.id))
-            .map(contact => ({ ...contact, status: { sent: true, operation: null } }));
-        // console.log('Server contacts:', serverContacts);
-        sessionStorage.setItem('local_contacts', JSON.stringify([...pendingContacts, ...serverContacts] || '[]'));
-        setContacts(dispatch, [...pendingContacts, ...serverContacts])
+        const remote = data.phonebooks
+            .filter(server => !pending.find(local => local.id === server.id))
+            .map(item => ({ ...item, status: { sent: true, operation: null } }));
+        const merged = [...pending, ...remote];
+
+        sessionStorage.setItem('local_contacts', JSON.stringify(merged));
+        dispatch({ type: 'LOAD_CONTACTS_SUCCESS', payload: merged });
     } catch (error) {
         console.error('Failed to load contacts:', error.message);
-        updateLocalContacts(dispatch, state, JSON.parse(sessionStorage.getItem('local_contacts') || '[]'));
+        dispatch({ type: 'LOAD_CONTACTS_FAILED', payload: stored });
     }
 };
 
-export const handleContactOperation = async (dispatch, state, operation, id, contactData = null) => {
-    const updateContactStatus = (success, newData = null) => {
-        const status = success ? { sent: true, operation: null } : { sent: false, operation };
-        const updatedContacts = state.contacts.map(c =>
-            c.id === id ? { ...c, ...(newData || contactData), status } : c
-        );
-        updateLocalContacts(dispatch, state, updatedContacts);
-    };
-
+export const handleContactOperation = async ({ dispatch, operation, id, contactData = null }) => {
     try {
         switch (operation) {
             case 'delete':
                 await api.delete(`api/phonebooks/${id}`);
-                updateLocalContacts(dispatch, state, state.contacts.filter(c => c.id !== id));
+                dispatch({ type: 'DELETE_CONTACT', payload: id });
                 break;
+
             case 'update':
                 await api.put(`api/phonebooks/${id}`, contactData);
-                updateContactStatus(true);
+                dispatch({
+                    type: 'UPDATE_CONTACT',
+                    payload: {
+                        id,
+                        changes: contactData,
+                        status: { sent: true, operation: null }
+                    }
+                });
                 break;
+
             case 'retry-add':
                 const { data } = await api.post('api/phonebooks', contactData);
-                updateContactStatus(true, { id: data.id });
+                dispatch({
+                    type: 'UPDATE_CONTACT',
+                    payload: {
+                        id,
+                        changes: { ...contactData, id: data.id },
+                        status: { sent: true, operation: null }
+                    }
+                });
                 break;
+
             default:
                 console.error(`Unknown operation: ${operation}`);
         }
     } catch (error) {
         console.error(`Failed to ${operation} contact:`, error);
-        if (operation !== 'retry-add') updateContactStatus(false);
+        if (operation !== 'retry-add') {
+            dispatch({
+                type: 'UPDATE_CONTACT',
+                payload: {
+                    id,
+                    changes: {},
+                    status: { sent: false, operation }
+                }
+            });
+        }
     }
 };
-
-export const setContacts = (dispatch, newContacts) => dispatch({
-    type: 'SET_CONTACTS',
-    payload: newContacts
-});
-
-export const setModal = (dispatch, newModal) => dispatch({
-    type: 'SET_MODAL',
-    payload: newModal
-});
-
-export const setQuery = (dispatch, newQuery) => dispatch({
-    type: 'SET_QUERY',
-    payload: newQuery
-});
 
 
 

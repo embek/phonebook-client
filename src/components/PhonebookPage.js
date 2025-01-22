@@ -69,7 +69,7 @@ export default function PhonebookPage() {
                     <FontAwesomeIcon icon={faUserPlus} />
                 </button>
             </div>
-            <div className="contacts-list" data-testid="contacts-list">
+            <div className="contacts-list" >
                 {state.contacts.map(contact => (
                     <ContactItem key={contact.id} contact={contact} />
                 ))}

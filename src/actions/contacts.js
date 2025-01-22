@@ -51,6 +51,8 @@ export const handleContactOperation = async ({ dispatch, operation, id, contactD
 
             case 'retry-add':
                 const { data } = await api.post('api/phonebooks', contactData);
+                const stored = JSON.parse(sessionStorage.getItem('local_contacts'));
+                sessionStorage.setItem('local_contacts', JSON.stringify(stored.filter(c => c.id !== id)));
                 dispatch({
                     type: 'UPDATE_CONTACT',
                     payload: {

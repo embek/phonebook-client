@@ -6,7 +6,7 @@ export default function AddPage() {
     const navigate = useNavigate();
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
-    
+
     const handleSubmit = async () => {
         const trimmedName = name.trim();
         const trimmedPhone = phone.trim();
@@ -27,7 +27,7 @@ export default function AddPage() {
         } catch (error) {
             const existingContacts = JSON.parse(sessionStorage.getItem('local_contacts') || '[]');
             sessionStorage.setItem('local_contacts', JSON.stringify([
-                { 
+                {
                     id: 'temp-' + Date.now(),
                     name: trimmedName,
                     phone: trimmedPhone,
@@ -46,27 +46,23 @@ export default function AddPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Name"
-                data-testid="name-input"
             />
             <input
                 className="custom-input"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Phone"
-                data-testid="phone-input"
             />
             <div>
-                <button 
-                    className="add-page-button" 
+                <button
+                    className="add-page-button"
                     onClick={handleSubmit}
-                    data-testid="save-button"
                 >
                     save
                 </button>
-                <button 
-                    className="add-page-button" 
+                <button
+                    className="add-page-button"
                     onClick={() => navigate('/')}
-                    data-testid="cancel-button"
                 >
                     cancel
                 </button>

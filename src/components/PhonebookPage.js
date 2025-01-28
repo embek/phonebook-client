@@ -33,7 +33,7 @@ export default function PhonebookPage() {
             observer.disconnect();
             sentinel.remove();
         };
-    }, [dispatch, state.query, state.contacts.length]);
+    }, [state.query, state.contacts.length]);
 
     return (
         <>
@@ -44,6 +44,7 @@ export default function PhonebookPage() {
                         dispatch,
                         query: {
                             ...state.query,
+                            limit: 5,
                             sortMode: state.query.sortMode === 'ASC' ? 'DESC' : 'ASC'
                         }
                     })}

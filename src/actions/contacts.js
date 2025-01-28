@@ -29,7 +29,7 @@ export const loadContacts = async ({ dispatch, query }) => {
     }
 };
 
-export const handleContactOperation = async ({ dispatch, operation, id, contactData = null }) => {
+export const handleContactOperation = async ({ dispatch, operation, id, contactData = {} }) => {
     try {
         switch (operation) {
             case 'delete':

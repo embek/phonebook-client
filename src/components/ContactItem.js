@@ -97,7 +97,7 @@ export default function ContactItem({ contact }) {
 
     return (
         <div className={`contact-box col-s-3 col-2 ${!contact.status?.sent ? 'unsent' : ''}`}>
-            <div style={{ display: "none" }}>{contact.id}</div>
+            {/* <div style={{ display: "none" }}>{contact.id}</div> */}
             <div>
                 <img
                     className="avatar"

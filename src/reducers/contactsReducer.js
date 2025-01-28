@@ -35,16 +35,10 @@ export function contactsReducer(state = initialState, action) {
             return { ...state, modal: action.payload };
 
         case 'SET_QUERY':
-            return {
-                ...state,
-                query: action.payload
-            };
+            return { ...state, query: action.payload };
 
         case 'LOAD_CONTACTS_SUCCESS':
-            return {
-                ...state,
-                contacts: action.payload
-            };
+            return { ...state, contacts: action.payload };
 
         case 'LOAD_CONTACTS_FAILED':
             return {

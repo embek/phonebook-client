@@ -6,7 +6,7 @@ A responsive React application for managing contacts with offline capabilities a
 
 - CRUD operations for contacts (name, phone number, avatar)
 - Responsive design for mobile, tablet and desktop
-- Offline functionality with local storage
+- Offline functionality with session storage
 - Infinite scroll pagination
 - Search and sort contacts
 - Avatar image upload and preview
@@ -16,10 +16,11 @@ A responsive React application for managing contacts with offline capabilities a
 ## Tech Stack
 
 - React 18
+- Redux Toolkit for state management
 - React Router v6
-- Axios
-- FontAwesome
-- Jest & React Testing Library
+- Axios for API calls
+- FontAwesome icons
+- Session Storage for offline capability
 - CSS3 with media queries
 
 ## Getting Started
@@ -44,8 +45,12 @@ A responsive React application for managing contacts with offline capabilities a
    ```
 
 3. Configure the API endpoint:
-   - Open `src/api/contactsAPI.js`
-   - Update the `BASE_URL` with your server URL
+   - Create a `.env` file in the root directory
+   - Add the following environment variables:
+     ```
+     REACT_APP_API_URL=http://localhost:3000
+     REACT_APP_BASE_URL=http://localhost:3001
+     ```
 
 4. Start the development server:
    ```bash
@@ -90,16 +95,28 @@ A responsive React application for managing contacts with offline capabilities a
 
 ```
 src/
-├── api/
-│   └── contactsAPI.js     # API configuration
-├── components/
+├── features/              # Feature-based organization
 │   ├── AddPage.js         # New contact form
 │   ├── AvatarPage.js      # Avatar management
 │   ├── ContactItem.js     # Contact card component
-│   ├── ContactsList.js    # Contacts container
 │   ├── DeleteModal.js     # Delete confirmation
-│   ├── ErrorPage.js       # Error handling
-│   └── PhonebookPage.js   # Main page
+│   ├── PhonebookPage.js   # Main page
+│   └── phonebookSlice.js  # Redux slice
+├── services/
+│   └── api.js             # API configuration
+├── store.js               # Redux store setup
+├── components/
+│   └── ErrorPage.js       # Error handling
 ├── App.js                 # Root component
-└── App.css               # Global styles
+└── App.css                # Global styles
 ```
+
+## State Management
+
+The application uses Redux Toolkit for state management with the following features:
+
+- Centralized store for contacts and UI state
+- Async thunks for API operations
+- Offline-first approach using session storage
+- Optimistic updates for better UX
+- Error handling and retry mechanisms

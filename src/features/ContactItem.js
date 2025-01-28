@@ -1,13 +1,13 @@
-import { faEdit, faTrash, faSave, faRotateRight } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useContext } from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { handleContactOperation, setModal } from "../actions/contacts";
-import { CustomContext } from "./CustomContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash, faSave, faRotateRight } from "@fortawesome/free-solid-svg-icons";
+import { handleContactOperation, setModal } from "./phonebookSlice";
 
 export default function ContactItem({ contact }) {
     const navigate = useNavigate();
-    const { dispatch } = useContext(CustomContext);
+    const dispatch = useDispatch();
     const [isEditing, setIsEditing] = useState(false);
     const [editForm, setEditForm] = useState({ name: contact.name, phone: contact.phone });
 
@@ -25,12 +25,11 @@ export default function ContactItem({ contact }) {
         }
 
         try {
-            await handleContactOperation({
-                dispatch,
+            await dispatch(handleContactOperation({
                 operation: 'update',
                 id: contact.id,
                 contactData: { name, phone }
-            });
+            }))
             setIsEditing(false);
         } catch (error) {
             console.log(error.message);
@@ -64,10 +63,10 @@ export default function ContactItem({ contact }) {
     }
 
     const handleDelete = () => {
-        setModal({
-            dispatch,
-            modal: { isOpen: true, contactIdToDelete: contact.id }
-        });
+        dispatch(setModal({
+            isOpen: true,
+            contactIdToDelete: contact.id
+        }));
     }
 
     const handleRetry = async () => {
@@ -79,12 +78,11 @@ export default function ContactItem({ contact }) {
                 await handleDelete();
                 break;
             case 'add':
-                await handleContactOperation({
-                    dispatch,
+                await dispatch(handleContactOperation({
                     operation: 'retry-add',
                     id: contact.id,
                     contactData: contact
-                });
+                }))
                 break;
             default:
                 if (editForm.name !== contact.name || editForm.phone !== contact.phone) {

@@ -1,9 +1,10 @@
-import { useContext } from "react";
-import { CustomContext } from "./CustomContext";
-import { handleContactOperation, setModal } from "../actions/contacts";
+import { useDispatch, useSelector } from "react-redux";
+import { handleContactOperation, setModal } from "./phonebookSlice";
 
-export default function DeleteModal({ contact }) {
-    const { dispatch } = useContext(CustomContext);
+export default function DeleteModal() {
+    const dispatch = useDispatch();
+    const { contacts, modal } = useSelector(state => state.phonebook);
+    const contact = contacts.find(c => c.id === modal.contactIdToDelete);
 
     if (!contact) {
         return null;
@@ -11,25 +12,18 @@ export default function DeleteModal({ contact }) {
 
     const handleConfirm = async () => {
         try {
-            await handleContactOperation({
-                dispatch,
+            await dispatch(handleContactOperation({
                 operation: 'delete',
                 id: contact.id
-            });
-            setModal({
-                dispatch,
-                modal: { isOpen: false, contactIdToDelete: null }
-            });
+            }))
+            dispatch(setModal({ isOpen: false, contactIdToDelete: null }));
         } catch (error) {
             console.log(error.message);
         }
     };
 
     const handleCancel = () => {
-        setModal({
-            dispatch,
-            modal: { isOpen: false, contactIdToDelete: null }
-        });
+        dispatch(setModal({ isOpen: false, contactIdToDelete: null }));
     }
 
     return (

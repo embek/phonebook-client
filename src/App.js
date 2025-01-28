@@ -1,14 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import PhonebookPage from './components/PhonebookPage';
-import AddPage from './components/AddPage';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import PhonebookPage from './features/PhonebookPage';
+import AddPage from './features/AddPage';
 import ErrorPage from './components/ErrorPage';
-import AvatarPage from './components/AvatarPage';
+import AvatarPage from './features/AvatarPage';
 import './App.css';
-import { CustomContextProvider } from './components/CustomContext';
 
 function App() {
   return (
-    <CustomContextProvider>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route
@@ -26,7 +27,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
-    </CustomContextProvider>
+    </Provider>
   );
 }
 
